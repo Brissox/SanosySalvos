@@ -26,7 +26,7 @@ public class MascotaFactory {
 
         m.setTipo(req.getTipo());
 
-        // 🔥 lógica por tipo
+        // lógica por tipo
         switch (req.getTipo()) {
 
             case CON_DUENO:
