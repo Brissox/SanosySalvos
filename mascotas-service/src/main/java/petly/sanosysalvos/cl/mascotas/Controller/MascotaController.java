@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Services.MascotaServices;
 
@@ -46,7 +47,7 @@ public class MascotaController {
         }
 
     }
-    @PostMapping
+   /*  @PostMapping
     public ResponseEntity<?> GuardarMascota(@RequestBody Mascota mascotaGuardar) {
         try{
             Mascota mascotaRegistrar = mascotaService.GuardarMascota(mascotaGuardar);
@@ -54,7 +55,7 @@ public class MascotaController {
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(" no se puede registrar la mascota ");
         }
-    }
+    }*/
 
     @DeleteMapping("/{id_mascota}")
     public ResponseEntity<?> EliminarMascota(@PathVariable Long id_mascota) {
@@ -90,6 +91,12 @@ public class MascotaController {
 
     }
 
+
+            @PostMapping
+            public ResponseEntity<?> crear(@RequestBody MascotaRequest request) {
+            System.out.println(request);
+            return ResponseEntity.ok(mascotaService.crearMascota(request));
+}
 
 
 

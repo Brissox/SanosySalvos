@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-
+import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
+import petly.sanosysalvos.cl.mascotas.Factory.MascotaFactory;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Repository.MascotaRepository;
 
@@ -37,4 +38,9 @@ public class MascotaServices {
         mascotaRepository.deleteById(id_mascota);
     }
 
+
+    public Mascota crearMascota(MascotaRequest request) {
+    Mascota mascota = MascotaFactory.crear(request);
+    return mascotaRepository.save(mascota);
+}
 }
