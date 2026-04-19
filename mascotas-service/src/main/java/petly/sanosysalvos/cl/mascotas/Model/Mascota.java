@@ -1,5 +1,7 @@
 package petly.sanosysalvos.cl.mascotas.Model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,7 +50,4 @@ public class Mascota {
     @Column(name = "ESTADO_REPRODUCTIVO", length = 30)
     private String estado_reproductivo;
     
-    @ManyToOne
-    @JoinColumn(name = "ID_USUARIO", nullable = true)
-    private Usuario usuario;
     }

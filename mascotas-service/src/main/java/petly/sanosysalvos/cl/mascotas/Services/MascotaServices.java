@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import petly.sanosysalvos.cl.mascotas.Model;
-import petly.sanosysalvos.cl.mascotas.Repository;
+
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Repository.MascotaRepository;
 

@@ -28,7 +28,7 @@ public class MascotaController {
 
     @GetMapping
     public ResponseEntity<?> ListarMascotas() {
-        List<Mascota> mascotas = mascotaService.BuscarTodoMascota();
+        List<Mascota> mascotas = mascotaService.BuscarTodoMascotas();
         if (mascotas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentran mascotas");
         }else{
@@ -81,7 +81,6 @@ public class MascotaController {
             mascotaActualizada.setColor(mascotaActualizar.getColor());
             mascotaActualizada.setFecha_nacimiento(mascotaActualizar.getFecha_nacimiento());
             mascotaActualizada.setEstado_reproductivo(mascotaActualizar.getEstado_reproductivo());
-            mascotaActualizada.setUsuario(mascotaActualizar.getUsuario());
 
             mascotaService.GuardarMascota(mascotaActualizada);
             return ResponseEntity.ok(mascotaActualizada);
