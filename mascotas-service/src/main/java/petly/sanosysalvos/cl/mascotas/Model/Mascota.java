@@ -15,14 +15,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="MASCOTA")
+@Table(name = "MASCOTA")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
 public class Mascota {
 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_MASCOTA")
@@ -51,7 +50,7 @@ public class Mascota {
 
     @Column(name = "ESTADO_REPRODUCTIVO", length = 30)
     private String estado_reproductivo;
-    
+
     @Column(name = "TIPO", nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoMascota tipo;
@@ -59,4 +58,7 @@ public class Mascota {
     @Column(name = "UBICACION")
     private String ubicacion;
 
-    }
+    @Column(name = "IMAGEN_URL")
+    private String imagenUrl;
+
+}
