@@ -24,50 +24,50 @@ public class usuarioController {
     private usuarioServices usuarioService;
 
     @GetMapping
-    public ResponseEntity<?> ListarSucursal() {
-        List<Usuario> sucursal = usuarioService.BuscarTodoUsuario();
-        if (sucursal.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra esa sucursal");
+    public ResponseEntity<?> Listarusuario() {
+        List<Usuario> usuario = usuarioService.BuscarTodoUsuario();
+        if (usuario.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentran datos");
         }else{
-            return ResponseEntity.status(HttpStatus.OK).body(sucursal);
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }
     }
 
-    @GetMapping("/{idSucursal}")
-    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Long idSucursal) {
+    @GetMapping("/{id_usuario}")
+    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Long id_usuario) {
         try{
-            Usuario sucursal = usuarioService.BuscarUnUsuario(idSucursal);
-            return ResponseEntity.status(HttpStatus.OK).body(sucursal);
+            Usuario usuario = usuarioService.BuscarUnUsuario(id_usuario);
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra esa sucursal");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra el usuario");
         }
 
     }
     @PostMapping
-    public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario sucursalGuardar) {
+    public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario usuarioGuardar) {
         try{
-            Usuario sucursalRegistrar = usuarioService.GuardarUsuario(sucursalGuardar);
-            return ResponseEntity.ok(sucursalRegistrar);
+            Usuario usuarioRegistrar = usuarioService.GuardarUsuario(usuarioGuardar);
+            return ResponseEntity.ok(usuarioRegistrar);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("no se encuentra esa sucursal");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("no se puede guardar el usuario");
         }
     }
 
-    @DeleteMapping("/{idSucursal}")
-    public ResponseEntity<?> EliminarUsuario(@PathVariable Long idSucursal) {
+    @DeleteMapping("/{id_usuario}")
+    public ResponseEntity<?> EliminarUsuario(@PathVariable Long id_usuario) {
         try{
-            Usuario sucursalBuscada = usuarioService.BuscarUnUsuario(idSucursal);
-            usuarioService.EliminarUsuario(idSucursal);
-            return ResponseEntity.ok(sucursalBuscada);
+            Usuario usuarioBuscado = usuarioService.BuscarUnUsuario(id_usuario);
+            usuarioService.EliminarUsuario(id_usuario);
+            return ResponseEntity.ok(usuarioBuscado);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra esa sucursal");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede eliminar el usuario");
         }
     }
 
-    @PutMapping("/{idSucursal}")
-    public ResponseEntity<?> ActualizarSucursal(@PathVariable Long idSucursal, @RequestBody Usuario usuarioActualizar) {
+    @PutMapping("/{id_usuario}")
+    public ResponseEntity<?> ActualizarUsuario(@PathVariable Long id_usuario, @RequestBody Usuario usuarioActualizar) {
         try{
-            Usuario usuarioActualizado = usuarioService.BuscarUnUsuario(idSucursal);
+            Usuario usuarioActualizado = usuarioService.BuscarUnUsuario(id_usuario);
 
             usuarioActualizado.setNombre(usuarioActualizar.getNombre());
             usuarioActualizado.setApellido_paterno(usuarioActualizar.getApellido_paterno());
@@ -83,7 +83,7 @@ public class usuarioController {
             usuarioService.GuardarUsuario(usuarioActualizado);
             return ResponseEntity.ok(usuarioActualizado);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra esa sucursal");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se pudo editar el usuario");
         }
 
     }
