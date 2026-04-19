@@ -8,6 +8,17 @@
             "mainClass": "petly.sanosysalvos.cl.usuarios.UsuariosServiceApplication",
             "projectName": "usuarios-service",
             "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56781 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=usuarios-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MascotasServiceApplication<mascotas-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.mascotas.MascotasServiceApplication",
+            "projectName": "mascotas-service",
+            "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
     ]

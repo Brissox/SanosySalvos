@@ -19,7 +19,7 @@ import petly.sanosysalvos.cl.mascotas.Services.MascotaServices;
 
 
 @RestController
-@RequestMapping("api/s1/Mascotas")
+@RequestMapping("/petly/mascotas")
 
 public class MascotaController {
 
