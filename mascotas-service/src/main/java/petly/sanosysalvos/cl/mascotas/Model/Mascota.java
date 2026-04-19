@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,4 +52,11 @@ public class Mascota {
     @Column(name = "ESTADO_REPRODUCTIVO", length = 30)
     private String estado_reproductivo;
     
+    @Column(name = "TIPO", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TipoMascota tipo;
+
+    @Column(name = "UBICACION")
+    private String ubicacion;
+
     }
