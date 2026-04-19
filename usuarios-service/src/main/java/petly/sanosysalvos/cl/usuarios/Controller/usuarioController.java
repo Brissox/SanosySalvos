@@ -18,13 +18,14 @@ import petly.sanosysalvos.cl.usuarios.Model.Usuario;
 import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
 @RestController
-@RequestMapping("api/s1/usuarios")
+@RequestMapping("/petly/usuarios")
 public class usuarioController {
       @Autowired
     private usuarioServices usuarioService;
 
+
     @GetMapping
-    public ResponseEntity<?> Listarusuario() {
+    public ResponseEntity<?> ListarUsuarios() {
         List<Usuario> usuario = usuarioService.BuscarTodoUsuario();
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentran datos");
