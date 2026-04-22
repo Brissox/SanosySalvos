@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import petly.sanosysalvos.cl.usuarios.Model.Usuario;
 import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/petly/usuarios")
 public class usuarioController {
@@ -50,7 +52,7 @@ public class usuarioController {
             Usuario usuarioRegistrar = usuarioService.GuardarUsuario(usuarioGuardar);
             return ResponseEntity.ok(usuarioRegistrar);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("no se puede guardar el usuario");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede registrar el usuario: " + e.getMessage());
         }
     }
 
@@ -68,25 +70,12 @@ public class usuarioController {
     @PutMapping("/{id_usuario}")
     public ResponseEntity<?> ActualizarUsuario(@PathVariable Long id_usuario, @RequestBody Usuario usuarioActualizar) {
         try{
-            Usuario usuarioActualizado = usuarioService.BuscarUnUsuario(id_usuario);
-
-            usuarioActualizado.setNombre(usuarioActualizar.getNombre());
-            usuarioActualizado.setApellido_paterno(usuarioActualizar.getApellido_paterno());
-            usuarioActualizado.setApellido_materno(usuarioActualizar.getApellido_materno());
-
-            usuarioActualizado.setCorreo(usuarioActualizar.getCorreo());
-            usuarioActualizado.setDireccion(usuarioActualizar.getDireccion());
-            usuarioActualizado.setTelefono(usuarioActualizar.getTelefono());
-            usuarioActualizado.setContrasena(usuarioActualizar.getContrasena());
-            usuarioActualizado.setRun(usuarioActualizar.getRun());
-            usuarioActualizado.setDv(usuarioActualizar.getDv());
-
-            usuarioService.GuardarUsuario(usuarioActualizado);
+            usuarioActualizar.setId_usuario(id_usuario);
+            Usuario usuarioActualizado = usuarioService.ActualizarUsuario(usuarioActualizar);
             return ResponseEntity.ok(usuarioActualizado);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se pudo editar el usuario");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede actualizar el usuario");
         }
-
     }
     
 }

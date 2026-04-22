@@ -22,8 +22,7 @@ public class Usuario {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "ID_USUARIO")
-    private long id_usuario;
-
+    private Long id_usuario;
 
     @Column(name= "NOMBRE",nullable= false , length = 30)
     private String nombre;
@@ -35,20 +34,19 @@ public class Usuario {
     private String apellido_materno;
 
     @Column(name = "TELEFONO",nullable= true , length = 9)
-    private Long telefono;
+    private String telefono;
 
     @Column(name = "DIRECCION",nullable= true , length = 50)
     private String direccion;
 
-
-    @Column(name = "CORREO",nullable= false , length = 100)
+    @Column(name = "CORREO",nullable= false , length = 100, unique = true)
     private String correo;
 
-    @Column(name = "CONTRASENA",nullable= false , length = 20)
+    @Column(name = "CONTRASENA",nullable= false , length = 255)
     private String contrasena;
 
-    @Column(name = "RUN",nullable= false , length = 9)
-    private int run;
+    @Column(name = "RUN",nullable= false , length = 9, unique = true)
+    private Integer run;
 
     @Column(name = "DV",nullable= false , length = 1)
     private String dv;

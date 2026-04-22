@@ -2,7 +2,8 @@ package petly.sanosysalvos.cl.usuarios.Services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -13,25 +14,71 @@ import petly.sanosysalvos.cl.usuarios.Repository.usuarioRepository;
 @Transactional
 
 public class usuarioServices {
-     @Autowired
 
-    private usuarioRepository usuariosrepository;
+    private final usuarioRepository usuariosrepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public List<Usuario> BuscarTodoUsuario(){
+    public usuarioServices(usuarioRepository usuariosrepository, PasswordEncoder passwordEncoder) {
+        this.usuariosrepository = usuariosrepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<Usuario> BuscarTodoUsuario() {
         return usuariosrepository.findAll();
     }
 
-    public Usuario BuscarUnUsuario(Long ID_USUARIO){
+    public Usuario BuscarUnUsuario(Long ID_USUARIO) {
         return usuariosrepository.findById(ID_USUARIO).get();
 
     }
 
-    public Usuario GuardarUsuario(Usuario usuario){
-        return usuariosrepository.save(usuario);
+    public Usuario GuardarUsuario(Usuario usuario) {
+
+        try
+        {
+            String passwordHasheada = passwordEncoder.encode(usuario.getContrasena());
+            usuario.setContrasena(passwordHasheada);
+            if (usuario.getContrasena() == null || usuario.getContrasena().isBlank()) {
+                throw new RuntimeException("La contraseña no puede estar vacía");
+            }
+        
+            return usuariosrepository.save(usuario);
+            
+        }catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("El correo o el RUN ya estan registrados", e);
+        }catch(Exception e){
+            throw new RuntimeException("Error al guardar el usuario: " + e.getMessage(), e);
+        }
 
     }
 
-    public void EliminarUsuario(Long ID_USUARIO){
+    public void EliminarUsuario(Long ID_USUARIO) {
         usuariosrepository.deleteById(ID_USUARIO);
+    }
+
+    public Usuario ActualizarUsuario(Usuario usuario) {
+
+        try {
+            Usuario usuarioExistente = usuariosrepository.findById(usuario.getId_usuario()).get();
+
+            usuarioExistente.setNombre(usuario.getNombre());
+            usuarioExistente.setApellido_paterno(usuario.getApellido_paterno());
+            usuarioExistente.setApellido_materno(usuario.getApellido_materno());
+            usuarioExistente.setTelefono(usuario.getTelefono());
+            usuarioExistente.setDireccion(usuario.getDireccion());
+            usuarioExistente.setCorreo(usuario.getCorreo());
+            usuarioExistente.setRun(usuario.getRun());
+            usuarioExistente.setDv(usuario.getDv());
+
+             if (usuario.getContrasena() != null && !usuario.getContrasena().isBlank()) {
+                String nuevaHash = passwordEncoder.encode(usuario.getContrasena());
+                usuarioExistente.setContrasena(nuevaHash);
+            }
+
+            return usuariosrepository.save(usuarioExistente);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el usuario", e);
+        }
+
     }
 }
