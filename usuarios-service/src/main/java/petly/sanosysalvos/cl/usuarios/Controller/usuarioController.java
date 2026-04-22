@@ -46,7 +46,7 @@ public class usuarioController {
         }
 
     }
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario usuarioGuardar) {
         try{
             Usuario usuarioRegistrar = usuarioService.GuardarUsuario(usuarioGuardar);

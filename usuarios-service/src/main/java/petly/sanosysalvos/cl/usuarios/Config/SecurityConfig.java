@@ -3,20 +3,33 @@ package petly.sanosysalvos.cl.usuarios.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    private final JwtFilter jwtFilter; // Inyecta el filtro que creamos antes
+
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // importante para APIs
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Spring NO va a crear ni mantener sesiones en el servidor.
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // permite todo (modo desarrollo)
-                );
+                        // Rutas públicas (cualquiera puede acceder SIN token)
+                        .requestMatchers("/petly/usuarios/registro", "/petly/auth/login").permitAll()
+                        // Todo lo demás requiere autenticación (tener token válido)
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Agrega nuestro filtro antes del filtro de autenticación de Spring Security
 
         return http.build();
     }
@@ -25,5 +38,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
 }
