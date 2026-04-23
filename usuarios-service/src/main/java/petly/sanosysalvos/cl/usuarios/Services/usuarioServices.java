@@ -27,9 +27,8 @@ public class usuarioServices {
         return usuariosrepository.findAll();
     }
 
-    public Usuario BuscarUnUsuario(Long ID_USUARIO) {
-        return usuariosrepository.findById(ID_USUARIO).get();
-
+    public Usuario BuscarUnUsuario(Integer RUN_USUARIO) {
+        return usuariosrepository.findById(RUN_USUARIO).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
     public Usuario GuardarUsuario(Usuario usuario) {
@@ -52,14 +51,14 @@ public class usuarioServices {
 
     }
 
-    public void EliminarUsuario(Long ID_USUARIO) {
+    public void EliminarUsuario(Integer ID_USUARIO) {
         usuariosrepository.deleteById(ID_USUARIO);
     }
 
     public Usuario ActualizarUsuario(Usuario usuario) {
 
         try {
-            Usuario usuarioExistente = usuariosrepository.findById(usuario.getId_usuario()).get();
+            Usuario usuarioExistente = usuariosrepository.findById(usuario.getRun()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             usuarioExistente.setNombre(usuario.getNombre());
             usuarioExistente.setApellido_paterno(usuario.getApellido_paterno());

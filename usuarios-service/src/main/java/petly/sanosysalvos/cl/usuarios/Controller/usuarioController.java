@@ -36,10 +36,10 @@ public class usuarioController {
         }
     }
 
-    @GetMapping("/{id_usuario}")
-    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Long id_usuario) {
+    @GetMapping("/{run}")
+    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Integer run) {
         try{
-            Usuario usuario = usuarioService.BuscarUnUsuario(id_usuario);
+            Usuario usuario = usuarioService.BuscarUnUsuario(run);
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra el usuario");
@@ -56,21 +56,21 @@ public class usuarioController {
         }
     }
 
-    @DeleteMapping("/{id_usuario}")
-    public ResponseEntity<?> EliminarUsuario(@PathVariable Long id_usuario) {
+    @DeleteMapping("/{run}")
+    public ResponseEntity<?> EliminarUsuario(@PathVariable Integer run) {
         try{
-            Usuario usuarioBuscado = usuarioService.BuscarUnUsuario(id_usuario);
-            usuarioService.EliminarUsuario(id_usuario);
+            Usuario usuarioBuscado = usuarioService.BuscarUnUsuario(run);
+            usuarioService.EliminarUsuario(run);
             return ResponseEntity.ok(usuarioBuscado);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede eliminar el usuario");
         }
     }
 
-    @PutMapping("/{id_usuario}")
-    public ResponseEntity<?> ActualizarUsuario(@PathVariable Long id_usuario, @RequestBody Usuario usuarioActualizar) {
+    @PutMapping("/{run}")
+    public ResponseEntity<?> ActualizarUsuario(@PathVariable Integer run, @RequestBody Usuario usuarioActualizar) {
         try{
-            usuarioActualizar.setId_usuario(id_usuario);
+            usuarioActualizar.setRun(run);
             Usuario usuarioActualizado = usuarioService.ActualizarUsuario(usuarioActualizar);
             return ResponseEntity.ok(usuarioActualizado);
         }catch(Exception e){
