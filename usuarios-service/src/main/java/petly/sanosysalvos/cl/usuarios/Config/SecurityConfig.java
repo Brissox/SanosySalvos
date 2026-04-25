@@ -21,13 +21,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> {}) // Habilita CORS con la configuración que definimos en CorsConfig
                 .csrf(csrf -> csrf.disable()) // importante para APIs
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Spring NO va a crear ni mantener sesiones en el servidor.
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas (cualquiera puede acceder SIN token)
-                        .requestMatchers("/petly/usuarios/registro", "/petly/auth/login").permitAll()
+                        .requestMatchers("/petly/usuarios/registrar", "/petly/auth/login").permitAll()
                         // Todo lo demás requiere autenticación (tener token válido)
                         .anyRequest().authenticated()
+                        
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Agrega nuestro filtro antes del filtro de autenticación de Spring Security
 
