@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import petly.sanosysalvos.cl.usuarios.Model.Usuario;
 import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/petly/usuarios")
 public class usuarioController {
@@ -34,59 +36,46 @@ public class usuarioController {
         }
     }
 
-    @GetMapping("/{id_usuario}")
-    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Long id_usuario) {
+    @GetMapping("/{run}")
+    public ResponseEntity<?> BuscarUnUsuarioPorId(@PathVariable Integer run) {
         try{
-            Usuario usuario = usuarioService.BuscarUnUsuario(id_usuario);
+            Usuario usuario = usuarioService.BuscarUnUsuario(run);
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentra el usuario");
         }
 
     }
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario usuarioGuardar) {
         try{
             Usuario usuarioRegistrar = usuarioService.GuardarUsuario(usuarioGuardar);
             return ResponseEntity.ok(usuarioRegistrar);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("no se puede guardar el usuario");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede registrar el usuario: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/{id_usuario}")
-    public ResponseEntity<?> EliminarUsuario(@PathVariable Long id_usuario) {
+    @DeleteMapping("/{run}")
+    public ResponseEntity<?> EliminarUsuario(@PathVariable Integer run) {
         try{
-            Usuario usuarioBuscado = usuarioService.BuscarUnUsuario(id_usuario);
-            usuarioService.EliminarUsuario(id_usuario);
+            Usuario usuarioBuscado = usuarioService.BuscarUnUsuario(run);
+            usuarioService.EliminarUsuario(run);
             return ResponseEntity.ok(usuarioBuscado);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede eliminar el usuario");
         }
     }
 
-    @PutMapping("/{id_usuario}")
-    public ResponseEntity<?> ActualizarUsuario(@PathVariable Long id_usuario, @RequestBody Usuario usuarioActualizar) {
+    @PutMapping("/{run}")
+    public ResponseEntity<?> ActualizarUsuario(@PathVariable Integer run, @RequestBody Usuario usuarioActualizar) {
         try{
-            Usuario usuarioActualizado = usuarioService.BuscarUnUsuario(id_usuario);
-
-            usuarioActualizado.setNombre(usuarioActualizar.getNombre());
-            usuarioActualizado.setApellido_paterno(usuarioActualizar.getApellido_paterno());
-            usuarioActualizado.setApellido_materno(usuarioActualizar.getApellido_materno());
-
-            usuarioActualizado.setCorreo(usuarioActualizar.getCorreo());
-            usuarioActualizado.setDireccion(usuarioActualizar.getDireccion());
-            usuarioActualizado.setTelefono(usuarioActualizar.getTelefono());
-            usuarioActualizado.setContrasena(usuarioActualizar.getContrasena());
-            usuarioActualizado.setRun(usuarioActualizar.getRun());
-            usuarioActualizado.setDv(usuarioActualizar.getDv());
-
-            usuarioService.GuardarUsuario(usuarioActualizado);
+            usuarioActualizar.setRun(run);
+            Usuario usuarioActualizado = usuarioService.ActualizarUsuario(usuarioActualizar);
             return ResponseEntity.ok(usuarioActualizado);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se pudo editar el usuario");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede actualizar el usuario");
         }
-
     }
     
 }

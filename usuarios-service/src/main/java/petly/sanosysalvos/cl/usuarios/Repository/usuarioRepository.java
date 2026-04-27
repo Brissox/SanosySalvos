@@ -1,10 +1,17 @@
 package petly.sanosysalvos.cl.usuarios.Repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-import  petly.sanosysalvos.cl.usuarios.Model.Usuario;
+import  org.springframework.data.jpa.repository.JpaRepository;
 
-public interface usuarioRepository extends JpaRepository<Usuario, Long>{
+import petly.sanosysalvos.cl.usuarios.Model.Usuario;
+
+public interface usuarioRepository extends JpaRepository<Usuario, Integer>{
+
+    // Método personalizado para buscar un usuario por correo
+    Optional<Usuario> findByCorreo(String correo);
+
+
 
 
 }
