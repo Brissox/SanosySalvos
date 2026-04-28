@@ -1,10 +1,16 @@
 package petly.sanosysalvos.cl.geolocalizacion.Services;
 
-import petly.sanosysalvos.cl.dto.GeoDTO;
-import petly.sanosysalvos.cl.model.Localizacion;
-import petly.sanosysalvos.cl.repository.GeoRepository;
-import org.locationtech.jts.geom.*;
+
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
+
+import petly.sanosysalvos.cl.geolocalizacion.DTO.GeoDTO;
+import petly.sanosysalvos.cl.geolocalizacion.Model.Localizacion;
+import petly.sanosysalvos.cl.geolocalizacion.Repository.GeoRepository;
+
 
 @Service
 public class GeoServices {
@@ -12,7 +18,7 @@ public class GeoServices {
     private final GeoRepository repo;
     private final GeometryFactory geometryFactory = new GeometryFactory();
 
-    public GeoService(GeoRepository repo) {
+    public GeoServices(GeoRepository repo) {
         this.repo = repo;
     }
 
@@ -23,15 +29,16 @@ public class GeoServices {
                 new Coordinate(dto.getLongitud(), dto.getLatitud())
         );
 
-        Ubicacion ubicacion = new Ubicacion(dto.getIdReporte(), point);
-
-        repo.save(ubicacion);
+        Localizacion localizacion = new Localizacion();
+        localizacion.setIdReporte(dto.getIdReporte());
+        localizacion.setUbicacion(point);
+        repo.save(localizacion);
     }
 
     // OBTENER UBICACIÓN
     public GeoDTO obtenerPorReporte(Long idReporte) {
 
-        Ubicacion ub = repo.findByIdReporte(idReporte)
+        Localizacion ub = repo.findByIdReporte(idReporte)
                 .orElseThrow(() -> new RuntimeException("No existe ubicación"));
 
         return new GeoDTO(
