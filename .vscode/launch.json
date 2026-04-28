@@ -20,6 +20,16 @@
             "projectName": "mascotas-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GeolocalizacionServiceApplication<geolocalizacion-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.geolocalizacion.GeolocalizacionServiceApplication",
+            "projectName": "geolocalizacion-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

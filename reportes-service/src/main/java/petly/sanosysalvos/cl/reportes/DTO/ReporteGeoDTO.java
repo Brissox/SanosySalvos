@@ -5,20 +5,18 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import petly.sanosysalvos.cl.reportes.Model.TipoReporte;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@AllArgsConstructor
 @Setter
+@Getter
 
-public class ReporteRequest {
 
-    private String titulo;
+public class ReporteGeoDTO {
+    private Long id;
+    private String comuna;
     private String descripcion;
-    private TipoReporte tipo;
-
     private Double latitud;
     private Double longitud;
 

@@ -1,11 +1,16 @@
 package petly.sanosysalvos.cl.reportes.Services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import petly.sanosysalvos.cl.reportes.Client.GeoClient;
+import petly.sanosysalvos.cl.reportes.DTO.GeoDTO;
+import petly.sanosysalvos.cl.reportes.DTO.ReporteGeoDTO;
+import petly.sanosysalvos.cl.reportes.DTO.ReporteRequest;
 import petly.sanosysalvos.cl.reportes.Model.Reporte;
 import petly.sanosysalvos.cl.reportes.Repository.ReporteRepository;
 
@@ -40,20 +45,20 @@ public class ReporteServices {
 
     private final GeoClient geoClient;
 
-    public ReporteService(GeoClient geoClient, ReporteRepository reporterepository) {
+    public ReporteServices(GeoClient geoClient, ReporteRepository reporterepository) {
         this.geoClient = geoClient;
         this.reporterepository = reporterepository;
     }
 
     public ReporteGeoDTO obtenerReporteConUbicacion(Long id) {
 
-        Reporte reporte = repo.findById(id)
+        Reporte reporte = reporterepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No existe"));
 
         GeoDTO geo = geoClient.obtenerUbicacion(id);
 
         return new ReporteGeoDTO(
-                reporte.getId(),
+                reporte.getId_reporte(),
                 reporte.getComuna(),
                 reporte.getDescripcion(),
                 geo.getLatitud(),
@@ -65,16 +70,15 @@ public class ReporteServices {
 
         //Crear y guardar reporte primero
         Reporte reporte = new Reporte();
-        reporte.setTitulo(request.getTitulo());
         reporte.setDescripcion(request.getDescripcion());
-        reporte.setTipo(request.getTipo()); // perdido / encontrado
-        reporte.setFecha(LocalDateTime.now());
+        reporte.setTipo_reporte(request.getTipo()); // perdido / encontrado
+        reporte.setFecha_reporte(LocalDateTime.now());
 
-        Reporte savedReporte = repo.save(reporte);
+        Reporte savedReporte = reporterepository.save(reporte);
 
         // Crear DTO de geolocalización
         GeoDTO geo = new GeoDTO();
-        geo.setIdReporte(savedReporte.getId());
+        geo.setIdReporte(savedReporte.getId_reporte());
         geo.setLatitud(request.getLatitud());
         geo.setLongitud(request.getLongitud());
 
