@@ -2,6 +2,8 @@ package petly.sanosysalvos.cl.geolocalizacion.Services;
 
 
 
+import java.util.List;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -46,5 +48,17 @@ public class GeoServices {
                 ub.getUbicacion().getY(), // lat
                 ub.getUbicacion().getX()  // lng
         );
+    }
+
+    public List<GeoDTO> obtenerTodos() {
+        // Implementación para obtener todas las ubicaciones
+        // Esto es solo un ejemplo, deberías ajustar según tu modelo de datos
+        return repo.findAll().stream()
+                .map(ub -> new GeoDTO(
+                        ub.getIdReporte(),
+                        ub.getUbicacion().getY(), // lat
+                        ub.getUbicacion().getX()  // lng
+                ))
+                .toList(); // Solo devuelve el primero, ajusta según tus necesidades
     }
 }

@@ -1,5 +1,7 @@
 package petly.sanosysalvos.cl.geolocalizacion.Controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,13 +34,9 @@ public class GeoController {
         return service.obtenerPorReporte(idReporte);
     }
 
-/*
-    private final GeoService service;
-
-    @GetMapping("/reporte/{idReporte}")
-    public GeoDTO getByReporte(@PathVariable Long idReporte) {
-        return service.findByReporte(idReporte);
+    @GetMapping("/todos")
+    public List<GeoDTO> obtenerTodos() {
+        return service.obtenerTodos();
     }
-*/
 
 }
