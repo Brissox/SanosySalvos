@@ -5,11 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 
-public class GeoDTO {
-    private Long idlocalizacion;
+public class GeoRequest {
     private Double latitud;
     private Double longitud;
+    
 }
