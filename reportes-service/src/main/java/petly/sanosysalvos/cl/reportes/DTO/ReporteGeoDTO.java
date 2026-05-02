@@ -1,23 +1,30 @@
 package petly.sanosysalvos.cl.reportes.DTO;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
+
 
 
 public class ReporteGeoDTO {
+
     private Long id;
-    private String comuna;
+    private String tipo_reporte;
+    private String estado_mascota;
+    private LocalDateTime fecha_reporte;
     private String descripcion;
+    private String contacto;
+    private String imagen_url;
+
     private Double latitud;
     private Double longitud;
 
+    private String estado_reporte;
 }
