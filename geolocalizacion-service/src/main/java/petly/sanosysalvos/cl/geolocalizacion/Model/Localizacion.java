@@ -29,8 +29,6 @@ public class Localizacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_reporte", nullable = false) 
-    private Long idReporte;
 
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point ubicacion;
