@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class GeoDTO {
-    private Long id;
-    private Double latitud;
-    private Double longitud;
+public class GeoResponse {
+        private Long id;
 }
