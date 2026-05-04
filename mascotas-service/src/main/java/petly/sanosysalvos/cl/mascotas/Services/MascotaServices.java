@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
+import petly.sanosysalvos.cl.mascotas.Model.TipoMascota;
 import petly.sanosysalvos.cl.mascotas.Repository.MascotaRepository;
 
 @Service
@@ -19,32 +20,30 @@ public class MascotaServices {
 
     @Autowired
     private OracleStorageService oracleStorageService;
-    
+
     @Autowired
     private MascotaRepository mascotaRepository;
 
-    public List<Mascota> BuscarTodoMascotas() {
+    public List<Mascota> buscarTodoMascotas() {
         return mascotaRepository.findAll();
     }
 
-    public Mascota BuscarUnaMascota(String chip){
+    public Mascota buscarUnaMascota(String chip) {
         return mascotaRepository.findById(chip).get();
     }
 
-    public Mascota GuardarMascota(Mascota mascota) {
+    public Mascota guardarMascota(Mascota mascota) {
         return mascotaRepository.save(mascota);
     }
 
-    public void EliminarMascota(String chip){
+    public void eliminarMascota(String chip) {
         mascotaRepository.deleteById(chip);
     }
 
-    public Mascota crearMascota(MascotaRequest request, MultipartFile imagen) {
+    public Mascota crearMascota(MascotaRequest request, MultipartFile imagen, Long userId) {
 
-        String urlImagen = null;
-
-        // Crear mascota desde el request
         Mascota mascota = new Mascota();
+
         mascota.setChip(request.getChip());
         mascota.setNombre(request.getNombre());
         mascota.setSexo(request.getSexo());
@@ -52,63 +51,10 @@ public class MascotaServices {
         mascota.setRaza(request.getRaza());
         mascota.setColor(request.getColor());
         mascota.setDescripcion(request.getDescripcion());
+        mascota.setTipo(TipoMascota.valueOf(request.getTipo()));
+        mascota.setOtroTipo(request.getOtroTipo());
+        mascota.setRunUsuario(userId.intValue());
 
-        // Validar imagen
-        if (imagen != null && !imagen.isEmpty()) {
-            try {
-                // Subir imagen a Oracle y obtener URL
-                urlImagen = oracleStorageService.subirImagen(imagen);
-            } catch (IOException e) {
-                throw new RuntimeException("Error subiendo imagen a Oracle", e);
-            }
-        }
-        
-        // Guardar URL en la mascota
-        mascota.setImagenUrl(urlImagen);
-
-        // Guardar en BD la totalidad de la mascota
-        return mascotaRepository.save(mascota);
-    }
-
-    public Mascota registrar(MascotaRequest request, MultipartFile foto, Long userId) {
-        String urlImagen = null;
-
-        // Crear mascota desde el request
-        Mascota mascota = new Mascota();
-        mascota.setChip(request.getChip());
-        mascota.setNombre(request.getNombre());
-        mascota.setSexo(request.getSexo());
-        mascota.setEdad(request.getEdad());
-        mascota.setRaza(request.getRaza());
-        mascota.setColor(request.getColor());
-        mascota.setDescripcion(request.getDescripcion());
-
-        // Validar imagen
-        if (foto != null && !foto.isEmpty()) {
-            try {
-                urlImagen = oracleStorageService.subirImagen(foto);
-            } catch (IOException e) {
-                throw new RuntimeException("Error subiendo imagen a Oracle", e);
-            }
-        }
-
-        mascota.setImagenUrl(urlImagen);
-        return mascotaRepository.save(mascota);
-    }
-
-    public Mascota actualizarMascota(Long id, MascotaRequest request, MultipartFile imagen) {
-
-        Mascota mascota = mascotaRepository.findById(String.valueOf(id))
-            .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
-
-        mascota.setNombre(request.getNombre());
-        mascota.setSexo(request.getSexo());
-        mascota.setRaza(request.getRaza());
-        mascota.setColor(request.getColor());
-        mascota.setEdad(request.getEdad());
-        mascota.setDescripcion(request.getDescripcion());
-
-        // Imagen opcional
         if (imagen != null && !imagen.isEmpty()) {
             try {
                 String urlImagen = oracleStorageService.subirImagen(imagen);
@@ -121,5 +67,41 @@ public class MascotaServices {
         return mascotaRepository.save(mascota);
     }
 
-}
+    public Mascota actualizarMascota(String chip, MascotaRequest request, MultipartFile imagen) {
 
+        Mascota mascota = mascotaRepository.findById(chip)
+                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+
+        mascota.setNombre(request.getNombre());
+        mascota.setSexo(request.getSexo());
+        mascota.setRaza(request.getRaza());
+        mascota.setColor(request.getColor());
+        mascota.setEdad(request.getEdad());
+        mascota.setDescripcion(request.getDescripcion());
+
+        // Imagen opcional
+        if (imagen != null && !imagen.isEmpty()) {
+            try {
+                //Guardar URL anterior
+                String urlAnterior = mascota.getImagenUrl();
+
+                //Subir nueva imagen
+                String nuevaUrl = oracleStorageService.subirImagen(imagen);
+
+                //Actualizar entidad
+                mascota.setImagenUrl(nuevaUrl);
+
+                //Eliminar imagen antigua (si existe)
+                if (urlAnterior != null) {
+                    oracleStorageService.eliminarImagen(urlAnterior);
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException("Error subiendo imagen", e);
+            }
+        }
+
+        return mascotaRepository.save(mascota);
+    }
+
+}

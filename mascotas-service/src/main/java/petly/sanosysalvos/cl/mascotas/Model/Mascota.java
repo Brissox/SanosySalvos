@@ -44,7 +44,10 @@ public class Mascota {
     @Enumerated(EnumType.STRING)
     private TipoMascota tipo;
 
-    @Column(name = "DESCRIPCION", nullable = false, length = 50)
+    @Column(name = "OTROTIPO", length = 100)
+    private String otroTipo;
+
+    @Column(name = "DESCRIPCION", nullable = false, length = 255)
     private String descripcion;
 
     @Column(name = "IMAGEN_URL")
