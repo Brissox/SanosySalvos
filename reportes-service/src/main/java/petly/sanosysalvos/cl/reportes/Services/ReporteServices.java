@@ -13,8 +13,11 @@ import petly.sanosysalvos.cl.reportes.DTO.GeoRequest;
 import petly.sanosysalvos.cl.reportes.DTO.GeoResponse;
 import petly.sanosysalvos.cl.reportes.DTO.ReporteGeoDTO;
 import petly.sanosysalvos.cl.reportes.DTO.ReporteRequest;
+import petly.sanosysalvos.cl.reportes.Model.Especie;
 import petly.sanosysalvos.cl.reportes.Model.EstadoReporte;
 import petly.sanosysalvos.cl.reportes.Model.Reporte;
+import petly.sanosysalvos.cl.reportes.Model.Sexo;
+import petly.sanosysalvos.cl.reportes.Model.Tamanio;
 import petly.sanosysalvos.cl.reportes.Model.TipoReporte;
 import petly.sanosysalvos.cl.reportes.Repository.ReporteRepository;
 
@@ -85,6 +88,12 @@ public class ReporteServices {
         r.setImagen_url(dto.getImagen_url());
         r.setEstado_mascota(dto.getEstado_mascota());
         r.setTipo_reporte(TipoReporte.valueOf(dto.getTipo_reporte()));
+        r.setEspecie(Especie.valueOf(dto.getEspecie()));
+        r.setRaza(dto.getRaza());
+        r.setColor_principal(dto.getColor_principal());
+        r.setTamanio(Tamanio.valueOf(dto.getTamanio()));
+        r.setSexo(Sexo.valueOf(dto.getSexo()));
+        r.setEdad_aproximada(dto.getEdad_aproximada());
         r.setEstado_reporte(EstadoReporte.ACTIVO);
 
         return reporterepository.save(r);
@@ -111,6 +120,13 @@ public class ReporteServices {
             dto.setImagen_url(r.getImagen_url());
             dto.setLatitud(geo.getLatitud());
             dto.setLongitud(geo.getLongitud());
+            dto.setEspecie(r.getEspecie().name());
+            dto.setRaza(r.getRaza());
+            dto.setColor_principal(r.getColor_principal());
+            dto.setTamanio(r.getTamanio().name());
+            dto.setSexo(r.getSexo().name());
+            dto.setEdad_aproximada(r.getEdad_aproximada());
+
 
             return dto;
         })

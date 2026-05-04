@@ -22,7 +22,13 @@ public class ReporteGeoDTO {
     private String descripcion;
     private String contacto;
     private String imagen_url;
-
+    private String Especie;
+    private String raza;
+    private String color_principal;
+    private String tamanio;
+    private String sexo;
+    private String edad_aproximada;
+    
     private Double latitud;
     private Double longitud;
 
