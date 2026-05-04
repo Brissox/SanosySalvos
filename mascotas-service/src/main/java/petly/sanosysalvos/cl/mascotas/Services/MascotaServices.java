@@ -32,6 +32,10 @@ public class MascotaServices {
         return mascotaRepository.findById(chip).get();
     }
 
+    public List<Mascota> buscarMascotasPorRun(Integer run) {
+        return mascotaRepository.findByRunUsuario(run);
+    }
+
     public Mascota guardarMascota(Mascota mascota) {
         return mascotaRepository.save(mascota);
     }
@@ -40,7 +44,7 @@ public class MascotaServices {
         mascotaRepository.deleteById(chip);
     }
 
-    public Mascota crearMascota(MascotaRequest request, MultipartFile imagen, Long userId) {
+    public Mascota crearMascota(MascotaRequest request, MultipartFile imagen, Integer run) {
 
         Mascota mascota = new Mascota();
 
@@ -53,7 +57,7 @@ public class MascotaServices {
         mascota.setDescripcion(request.getDescripcion());
         mascota.setTipo(TipoMascota.valueOf(request.getTipo()));
         mascota.setOtroTipo(request.getOtroTipo());
-        mascota.setRunUsuario(userId.intValue());
+        mascota.setRunUsuario(run);
 
         if (imagen != null && !imagen.isEmpty()) {
             try {
@@ -82,16 +86,16 @@ public class MascotaServices {
         // Imagen opcional
         if (imagen != null && !imagen.isEmpty()) {
             try {
-                //Guardar URL anterior
+                // Guardar URL anterior
                 String urlAnterior = mascota.getImagenUrl();
 
-                //Subir nueva imagen
+                // Subir nueva imagen
                 String nuevaUrl = oracleStorageService.subirImagen(imagen);
 
-                //Actualizar entidad
+                // Actualizar entidad
                 mascota.setImagenUrl(nuevaUrl);
 
-                //Eliminar imagen antigua (si existe)
+                // Eliminar imagen antigua (si existe)
                 if (urlAnterior != null) {
                     oracleStorageService.eliminarImagen(urlAnterior);
                 }

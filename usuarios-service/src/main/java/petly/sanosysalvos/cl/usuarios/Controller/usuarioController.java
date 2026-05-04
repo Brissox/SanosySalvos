@@ -46,6 +46,7 @@ public class usuarioController {
         }
 
     }
+    
     @PostMapping("/registrar")
     public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario usuarioGuardar) {
         try{
