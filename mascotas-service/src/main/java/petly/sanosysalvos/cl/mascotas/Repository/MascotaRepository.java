@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 
 
-public interface MascotaRepository extends JpaRepository<Mascota, Long>{
+public interface MascotaRepository extends JpaRepository<Mascota, String>{
 
 
 }
