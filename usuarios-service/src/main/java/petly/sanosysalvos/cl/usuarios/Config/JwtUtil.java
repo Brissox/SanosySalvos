@@ -24,9 +24,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generarToken(String correo) {
+    public String generarToken(String correo, Integer run) {
         return Jwts.builder()
                 .setSubject(correo) //Email de la persona
+                .claim("run", run)
                 .setIssuedAt(new Date()) //Cuando se creó?
                 .setExpiration(new Date(System.currentTimeMillis() + expiration)) //Expira en 1 hora
                 .signWith(getKey(), SignatureAlgorithm.HS256) //La clave secreta designada firma el token 

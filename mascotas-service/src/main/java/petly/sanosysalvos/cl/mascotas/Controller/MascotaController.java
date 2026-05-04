@@ -56,6 +56,24 @@ public class MascotaController {
 
     }
 
+    @GetMapping("/mis-mascotas")
+    public ResponseEntity<?> obtenerMisMascotas(
+            @RequestHeader("Authorization") String authHeader) {
+
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            Integer run = jwtUtil.extractRun(token);
+
+            List<Mascota> mascotas = mascotaService.buscarMascotasPorRun(run);
+
+            return ResponseEntity.ok(mascotas);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Token inválido o error al obtener mascotas");
+        }
+    }
+
     @PostMapping(value = "/registrar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registrarMascota(
             @RequestHeader("Authorization") String authHeader,
@@ -64,9 +82,9 @@ public class MascotaController {
 
         try {
             String token = authHeader.replace("Bearer ", "");
-            Long userId = jwtUtil.extractUserId(token);
+            Integer run = jwtUtil.extractRun(token);
 
-            Mascota mascotaGuardada = mascotaService.crearMascota(mascotaRequest, foto, userId);
+            Mascota mascotaGuardada = mascotaService.crearMascota(mascotaRequest, foto, run);
 
             return ResponseEntity.ok(mascotaGuardada);
 
