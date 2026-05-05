@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.env
+oci_apy_key.pem
+oci_apy_key_public.pem
