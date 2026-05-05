@@ -26,7 +26,7 @@ public class Reporte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_REPORTE")
-    private long id_reporte;
+    private long idreporte;
 
     @Column(name = "TIPO_REPORTE", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -42,15 +42,6 @@ public class Reporte {
     @Column(name = "FECHA_REPORTE", nullable = false)
     private LocalDateTime fecha_reporte;
 
-    @Column(name = "LATITUD", nullable = false)
-    private Double latitud;
-
-    @Column(name = "LONGITUD", nullable = false)
-    private Double longitud;
-
-    @Column(name = "COMUNA", nullable = false, length = 100)
-    private String comuna;
-
     @Column(name = "DESCRIPCION", length = 500)
     private String descripcion;
 
@@ -60,5 +51,28 @@ public class Reporte {
     @Column(name = "IMAGEN_URL", length = 255)
     private String imagen_url;
 
+    @Column(name = "localizacion_id")
+    private Long localizacionId;
+
+    @Column(name = "ESPECIE", length = 50)
+    @Enumerated(EnumType.STRING)
+    private Especie especie;
+
+    @Column(name = "RAZA", length = 100)
+    private String raza;
+
+    @Column(name = "COLOR_PRINCIPAL", length = 50)
+    private String color_principal;
+
+    @Column(name = "TAMANIO", length = 20)
+    @Enumerated(EnumType.STRING)
+    private Tamanio tamanio;
+
+    @Column(name = "SEXO", length = 10)
+    @Enumerated(EnumType.STRING)
+    private Sexo sexo;
+
+    @Column(name = "EDAD_APROXIMADA", length = 30)
+    private String edad_aproximada;
 
 }
