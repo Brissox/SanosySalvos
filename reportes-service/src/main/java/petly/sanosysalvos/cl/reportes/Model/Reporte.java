@@ -30,17 +30,17 @@ public class Reporte {
 
     @Column(name = "TIPO_REPORTE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipoReporte tipo_reporte;
+    private TipoReporte tipoReporte;
 
     @Column(name = "ESTADO_REPORTE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private EstadoReporte estado_reporte;
+    private EstadoReporte estadoReporte;
 
     @Column(name = "ESTADO_MASCOTA", length = 50)
-    private String estado_mascota;
+    private String estadoMascota;
 
     @Column(name = "FECHA_REPORTE", nullable = false)
-    private LocalDateTime fecha_reporte;
+    private LocalDateTime fechaReporte;
 
     @Column(name = "DESCRIPCION", length = 500)
     private String descripcion;
@@ -49,7 +49,7 @@ public class Reporte {
     private String contacto;
 
     @Column(name = "IMAGEN_URL", length = 255)
-    private String imagen_url;
+    private String imagenUrl;
 
     @Column(name = "localizacion_id")
     private Long localizacionId;
@@ -62,7 +62,7 @@ public class Reporte {
     private String raza;
 
     @Column(name = "COLOR_PRINCIPAL", length = 50)
-    private String color_principal;
+    private String colorPrincipal;
 
     @Column(name = "TAMANIO", length = 20)
     @Enumerated(EnumType.STRING)
@@ -73,6 +73,6 @@ public class Reporte {
     private Sexo sexo;
 
     @Column(name = "EDAD_APROXIMADA", length = 30)
-    private String edad_aproximada;
+    private String edadAproximada;
 
 }

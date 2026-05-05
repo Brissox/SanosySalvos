@@ -16,21 +16,21 @@ import lombok.NoArgsConstructor;
 public class ReporteGeoDTO {
 
     private Long id;
-    private String tipo_reporte;
-    private String estado_mascota;
-    private LocalDateTime fecha_reporte;
+    private String tipoReporte;
+    private String estadoMascota;
+    private LocalDateTime fechaReporte;
     private String descripcion;
     private String contacto;
-    private String imagen_url;
-    private String Especie;
+    private String imagenUrl;
+    private String especie;
     private String raza;
-    private String color_principal;
+    private String colorPrincipal;
     private String tamanio;
     private String sexo;
-    private String edad_aproximada;
+    private String edadAproximada;
     
     private Double latitud;
     private Double longitud;
 
-    private String estado_reporte;
+    private String estadoReporte;
 }
