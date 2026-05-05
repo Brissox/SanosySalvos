@@ -84,17 +84,17 @@ public class ReporteServices {
         r.setLocalizacionId(geoRes.getId());
         r.setDescripcion(dto.getDescripcion());
         r.setContacto(dto.getContacto());
-        r.setFecha_reporte(dto.getFecha_reporte());
-        r.setImagen_url(dto.getImagen_url());
-        r.setEstado_mascota(dto.getEstado_mascota());
-        r.setTipo_reporte(TipoReporte.valueOf(dto.getTipo_reporte()));
+        r.setFechaReporte(dto.getFechaReporte());
+        r.setImagenUrl(dto.getImagenUrl());
+        r.setEstadoMascota(dto.getEstadoMascota());
+        r.setTipoReporte(TipoReporte.valueOf(dto.getTipoReporte()));
         r.setEspecie(Especie.valueOf(dto.getEspecie()));
         r.setRaza(dto.getRaza());
-        r.setColor_principal(dto.getColor_principal());
+        r.setColorPrincipal(dto.getColorPrincipal());
         r.setTamanio(Tamanio.valueOf(dto.getTamanio()));
         r.setSexo(Sexo.valueOf(dto.getSexo()));
-        r.setEdad_aproximada(dto.getEdad_aproximada());
-        r.setEstado_reporte(EstadoReporte.ACTIVO);
+        r.setEdadAproximada(dto.getEdadAproximada());
+        r.setEstadoReporte(EstadoReporte.ACTIVO);
 
         return reporterepository.save(r);
         }
@@ -111,26 +111,39 @@ public class ReporteServices {
             ReporteGeoDTO dto = new ReporteGeoDTO();
 
             dto.setId(r.getIdreporte());
-            dto.setTipo_reporte(r.getTipo_reporte().name());
-            dto.setEstado_reporte(r.getEstado_reporte().name());
-            dto.setEstado_mascota(r.getEstado_mascota());
-            dto.setFecha_reporte(r.getFecha_reporte());
+            dto.setTipoReporte(r.getTipoReporte().name());
+            dto.setEstadoReporte(r.getEstadoReporte().name());
+            dto.setEstadoMascota(r.getEstadoMascota());
+            dto.setFechaReporte(r.getFechaReporte());
             dto.setDescripcion(r.getDescripcion());
             dto.setContacto(r.getContacto());
-            dto.setImagen_url(r.getImagen_url());
+            dto.setImagenUrl(r.getImagenUrl());
             dto.setLatitud(geo.getLatitud());
             dto.setLongitud(geo.getLongitud());
             dto.setEspecie(r.getEspecie().name());
             dto.setRaza(r.getRaza());
-            dto.setColor_principal(r.getColor_principal());
+            dto.setColorPrincipal(r.getColorPrincipal());
             dto.setTamanio(r.getTamanio().name());
             dto.setSexo(r.getSexo().name());
-            dto.setEdad_aproximada(r.getEdad_aproximada());
+            dto.setEdadAproximada(r.getEdadAproximada());
 
 
             return dto;
         })
         .collect(Collectors.toList());
         }
+
+
+         // LISTAR Reportes por Tipo
+        public List<Reporte> filtrarPorTipo(TipoReporte tipoReporte) {
+        return reporterepository.findByTipoReporte(tipoReporte);
+        }
+
+        // LISTAR Reportes por Estado
+        public List<Reporte> filtrarPorEstado(EstadoReporte estadoReporte) {
+        return reporterepository.findByEstadoReporte(estadoReporte);
+        }
+
+       
   
 }
