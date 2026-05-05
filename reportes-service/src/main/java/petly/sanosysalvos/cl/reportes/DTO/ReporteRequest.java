@@ -4,17 +4,11 @@ import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-
 public class ReporteRequest {
 
     private Double latitud;
@@ -27,7 +21,13 @@ public class ReporteRequest {
     private String contacto;
     private String imagenUrl;
     private String estadoReporte;
- 
+    private String especie;
+    private String raza;
+    private String colorPrincipal;
+    private String tamanio;
+    private String sexo;
+    private String edadAproximada;
+
 }
 
 
