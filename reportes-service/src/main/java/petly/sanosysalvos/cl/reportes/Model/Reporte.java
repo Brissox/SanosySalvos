@@ -14,10 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Entity
-@Table(name="REPORTE")
+@Table(name = "REPORTE")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,14 +34,14 @@ public class Reporte {
     @Enumerated(EnumType.STRING)
     private EstadoReporte estadoReporte;
 
-    @Column(name = "ESTADO_MASCOTA", length = 50)
-    private String estadoMascota;
-
     @Column(name = "FECHA_REPORTE", nullable = false)
     private LocalDateTime fechaReporte;
 
-    @Column(name = "DESCRIPCION", length = 500)
+    @Column(name = "DESCRIPCION", length = 255)
     private String descripcion;
+
+    @Column(name = "OTRAESPECIE", length = 500)
+    private String otraEspecie;
 
     @Column(name = "CONTACTO", length = 100)
     private String contacto;
@@ -73,6 +71,6 @@ public class Reporte {
     private Sexo sexo;
 
     @Column(name = "EDAD_APROXIMADA", length = 30)
-    private String edadAproximada;
+    private Integer edadAproximada;
 
 }

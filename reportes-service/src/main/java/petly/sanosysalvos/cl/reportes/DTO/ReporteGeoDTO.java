@@ -17,7 +17,6 @@ public class ReporteGeoDTO {
 
     private Long id;
     private String tipoReporte;
-    private String estadoMascota;
     private LocalDateTime fechaReporte;
     private String descripcion;
     private String contacto;
@@ -27,7 +26,7 @@ public class ReporteGeoDTO {
     private String colorPrincipal;
     private String tamanio;
     private String sexo;
-    private String edadAproximada;
+    private Integer edadAproximada;
     
     private Double latitud;
     private Double longitud;
