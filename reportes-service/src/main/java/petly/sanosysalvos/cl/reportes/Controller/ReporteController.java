@@ -2,16 +2,17 @@ package petly.sanosysalvos.cl.reportes.Controller;
 
 import java.util.List;
 
-
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import petly.sanosysalvos.cl.reportes.DTO.ReporteGeoDTO;
 import petly.sanosysalvos.cl.reportes.DTO.ReporteRequest;
@@ -51,36 +52,51 @@ public class ReporteController {
     }
 
     // CREAR (usa DTO correcto)
-    @PostMapping
-    public ResponseEntity<Reporte> crear(@RequestBody ReporteRequest request) {
-        return ResponseEntity.ok(reporteservice.crear(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Reporte> crear(
+            @RequestPart("data") ReporteRequest request,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen) {
+        try {
+            return ResponseEntity.ok(reporteservice.crear(request, imagen));
+        } catch (Exception e) {
+            throw new RuntimeException("Error creando reporte: " + e.getMessage(), e);
+        }
     }
 
-    // ELIMINAR 
+    // ELIMINAR
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        reporteservice.eliminarGeo(id);
-        return ResponseEntity.noContent().build();
+        try {
+            reporteservice.eliminarGeo(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new RuntimeException("Error eliminando reporte: " + e.getMessage(), e);
+        }
     }
 
     // FILTRAR POR TIPO
     @GetMapping("/filtrar/tipo")
     public ResponseEntity<List<Reporte>> filtrarPorTipo(
             @RequestParam TipoReporte tipoReporte) {
-
-        return ResponseEntity.ok(
-                reporteservice.filtrarPorTipo(tipoReporte)
-        );
+        try {
+            return ResponseEntity.ok(
+                    reporteservice.filtrarPorTipo(tipoReporte)
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error filtrando por tipo: " + e.getMessage(), e);
+        }
     }
 
     // FILTRAR POR ESTADO
-
     @GetMapping("/filtrar/estado")
     public ResponseEntity<List<Reporte>> filtrarPorEstado(
             @RequestParam EstadoReporte estadoReporte) {
-
-        return ResponseEntity.ok(
-                reporteservice.filtrarPorEstado(estadoReporte)
-        );
+        try {
+            return ResponseEntity.ok(
+                    reporteservice.filtrarPorEstado(estadoReporte)
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error filtrando por estado: " + e.getMessage(), e);
+        }
     }
 }
