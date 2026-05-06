@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import petly.sanosysalvos.cl.usuarios.Model.Usuario;
@@ -78,5 +79,15 @@ public class usuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se puede actualizar el usuario");
         }
     }
+
     
+    @GetMapping("/filtrar/rol")
+    public ResponseEntity<?> filtrarPorRol(@RequestParam String nombreRol) {
+        try{
+            List<Usuario> usuarios = usuarioService.filtrarPorRol(nombreRol);
+            return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se encuentran roles");
+        }
+    }
 }

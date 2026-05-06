@@ -81,5 +81,9 @@ public class usuarioServices {
 
     }
 
+    public List<Usuario> filtrarPorRol(String nombreRol) {
+        return usuariosrepository.findByRolNombreRol(nombreRol);
+        }
+
 
 }
