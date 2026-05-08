@@ -12,7 +12,7 @@ import petly.sanosysalvos.cl.reportes.DTO.GeoRequest;
 import petly.sanosysalvos.cl.reportes.DTO.GeoResponse;
 
 
-@FeignClient(name = "geolocalizacion-service", url = "http://localhost:8082")
+@FeignClient(name = "geolocalizacion-service", url = "http://localhost:8083")
 public interface GeoClient {
 
     @PostMapping("/petly/geo")
