@@ -16,7 +16,6 @@ import petly.sanosysalvos.cl.usuarios.Config.JwtUtil;
 import petly.sanosysalvos.cl.usuarios.Model.Usuario;
 import petly.sanosysalvos.cl.usuarios.Repository.usuarioRepository;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/petly/auth")
 public class AuthController {
