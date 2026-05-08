@@ -23,7 +23,6 @@ import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Services.MascotaServices;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/petly/mascotas")
 

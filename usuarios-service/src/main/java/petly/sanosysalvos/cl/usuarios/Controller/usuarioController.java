@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import petly.sanosysalvos.cl.usuarios.Model.Usuario;
 import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/petly/usuarios")
 public class usuarioController {
