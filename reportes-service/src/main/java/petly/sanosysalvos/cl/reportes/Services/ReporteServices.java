@@ -105,7 +105,6 @@ public class ReporteServices {
         r.setContacto(dto.getContacto());
         r.setFechaReporte(LocalDateTime.now());
         r.setImagenUrl(imagenUrl);
-        r.setEstadoReporte(EstadoReporte.ACTIVO);
         r.setTipoReporte(TipoReporte.valueOf(dto.getTipoReporte()));
 
         if ("OTRO".equalsIgnoreCase(dto.getEspecie())) {
