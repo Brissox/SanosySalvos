@@ -108,4 +108,8 @@ public class MascotaServices {
         return mascotaRepository.save(mascota);
     }
 
+    public List<Mascota> buscarPorRunUsuario(Integer runUsuario) {
+    return mascotaRepository.findByRunUsuario(runUsuario);
+    }
+
 }

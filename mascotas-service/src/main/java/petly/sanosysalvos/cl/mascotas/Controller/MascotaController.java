@@ -121,4 +121,16 @@ public class MascotaController {
         }
     }
 
+
+    @GetMapping("/filtrar/{run}")
+    public ResponseEntity<List<Mascota>> buscarPorRunUsuario(
+            @PathVariable Integer run) {
+        try {
+            return ResponseEntity.ok(
+                    mascotaService.buscarPorRunUsuario(run));
+        } catch (Exception e) {
+            throw new RuntimeException("Error buscando por run: " + e.getMessage(), e);
+        }
+    }
+
 }
