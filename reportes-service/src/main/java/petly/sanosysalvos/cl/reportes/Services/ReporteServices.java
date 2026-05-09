@@ -170,4 +170,8 @@ public class ReporteServices {
         return reporterepository.findByEstadoReporte(estadoReporte);
     }
 
+    public List<Reporte> buscarPorRunUsuario(Integer runUsuario) {
+    return reporterepository.findByRunUsuario(runUsuario);
+    }
+
 }

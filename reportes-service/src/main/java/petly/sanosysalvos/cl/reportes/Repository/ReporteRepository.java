@@ -13,4 +13,6 @@ public interface  ReporteRepository extends JpaRepository<Reporte, Long> {
     List<Reporte> findByTipoReporte(TipoReporte tipoReporte);
 
     List<Reporte> findByEstadoReporte(EstadoReporte estadoReporte);
+
+    List<Reporte> findByRunUsuario(Integer runUsuario);
 }

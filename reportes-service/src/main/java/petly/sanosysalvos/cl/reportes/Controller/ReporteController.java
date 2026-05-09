@@ -106,4 +106,17 @@ public class ReporteController {
             throw new RuntimeException("Error filtrando por estado: " + e.getMessage(), e);
         }
     }
+    
+    @GetMapping("/filtrar/{run}")
+    public ResponseEntity<List<Reporte>> buscarPorRunUsuario(
+            @PathVariable Integer run) {
+        try {
+            return ResponseEntity.ok(
+                    reporteservice.buscarPorRunUsuario(run));
+        } catch (Exception e) {
+            throw new RuntimeException("Error buscando por run: " + e.getMessage(), e);
+        }
+    }
+
+
 }
