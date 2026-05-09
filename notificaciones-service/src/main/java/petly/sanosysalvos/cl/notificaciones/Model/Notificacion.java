@@ -1,7 +1,5 @@
 package petly.sanosysalvos.cl.notificaciones.Model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,21 +9,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name="NOTIFICACION")
+@Table(name = "NOTIFICACION")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
-
 public class Notificacion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_NOTIFICACION")
-    private long id_notificacion;
+    private Long id;
 
     @Column(name = "TITULO", nullable = false, length = 100)
     private String titulo;
@@ -34,7 +35,7 @@ public class Notificacion {
     private String mensaje;
 
     @Column(name = "FECHA_CREACION", nullable = false)
-    private LocalDateTime fecha_creacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "LEIDA", nullable = false)
     private boolean leida;
@@ -44,8 +45,11 @@ public class Notificacion {
     private TipoNotificacion tipo;
 
     @Column(name = "ID_USUARIO", nullable = false)
-    private Long id_usuario;
+    private Long idUsuario;
 
     @Column(name = "ID_REPORTE")
-    private Long id_reporte;
+    private Long idReporte;
+
+    @Column(name = "ID_COINCIDENCIA")
+    private Long idCoincidencia;
 }
