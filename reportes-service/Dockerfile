@@ -8,5 +8,7 @@ RUN mvn package -DskipTests -B -q
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+COPY oci_api_key.pem /app/oci_api_key.pem
+ENV OCI_PRIVATE_KEY_PATH=/app/oci_api_key.pem
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
