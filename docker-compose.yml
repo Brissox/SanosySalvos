@@ -124,6 +124,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_notificaciones
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+      SPRING_RABBITMQ_HOST: rabbitmq
     depends_on:
       postgres:
         condition: service_healthy
