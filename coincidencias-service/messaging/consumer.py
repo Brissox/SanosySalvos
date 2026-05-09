@@ -27,7 +27,7 @@ async def iniciar_consumer(on_reporte_nuevo):
 
     async with queue.iterator() as msgs:
         async for message in msgs:
-            async with message.process(requeue_on_error=True):
+            async with message.process(requeue=True):
                 try:
                     data = json.loads(message.body)
                     reporte = ReporteEventoDTO.model_validate(data)
