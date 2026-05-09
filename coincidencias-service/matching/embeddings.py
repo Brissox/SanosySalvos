@@ -30,3 +30,14 @@ def similitud_coseno(texto_a: str, texto_b: str) -> float:
     emb_a, emb_b = model.encode([texto_a, texto_b], convert_to_tensor=True)
     score = cos_sim(emb_a, emb_b).item()
     return max(0.0, min(1.0, float(score)))
+
+
+def similitud_coseno_lote(pares: list[tuple[str, str]]) -> list[float]:
+    """Codifica todos los textos en un único model.encode() y retorna similitud coseno por par."""
+    model = get_model()
+    textos = [t for par in pares for t in par]
+    embs = model.encode(textos, convert_to_tensor=True)
+    return [
+        max(0.0, min(1.0, float(cos_sim(embs[i * 2], embs[i * 2 + 1]).item())))
+        for i in range(len(pares))
+    ]
