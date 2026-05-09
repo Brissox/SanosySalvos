@@ -1,7 +1,7 @@
 services:
 
   postgres:
-    image: postgres:16-alpine
+    image: postgis/postgis:16-3.4-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "220206Cj*"
@@ -78,6 +78,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: "220206Cj*"
       GEO_SERVICE_URL: http://geolocalizacion-service:8082
+      SPRING_RABBITMQ_HOST: rabbitmq
     depends_on:
       postgres:
         condition: service_healthy

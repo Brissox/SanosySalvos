@@ -4,3 +4,5 @@ CREATE DATABASE "bd_Geo";
 CREATE DATABASE "bd_Mascotas";
 CREATE DATABASE "bd_notificaciones";
 CREATE DATABASE "bd_coincidencias";
+\connect "bd_Geo"
+CREATE EXTENSION IF NOT EXISTS postgis;
