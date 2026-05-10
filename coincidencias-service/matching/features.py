@@ -16,20 +16,16 @@ def score_especie(a: ReporteEventoDTO, b: ReporteEventoDTO) -> float:
 
 def score_raza(a: ReporteEventoDTO, b: ReporteEventoDTO) -> float:
     if not a.raza or not b.raza:
-        return 0.5  # dato ausente: incertidumbre, no penaliza completamente
-    return 1.0 if a.raza.strip().lower() == b.raza.strip().lower() else 0.0
+        return 0.5
+    from matching.embeddings import similitud_coseno
+    return similitud_coseno(a.raza.strip(), b.raza.strip())
 
 
 def score_color(a: ReporteEventoDTO, b: ReporteEventoDTO) -> float:
     if not a.color_principal or not b.color_principal:
         return 0.5
-    tokens_a = set(a.color_principal.lower().split())
-    tokens_b = set(b.color_principal.lower().split())
-    if not tokens_a or not tokens_b:
-        return 0.5
-    interseccion = tokens_a & tokens_b
-    union = tokens_a | tokens_b
-    return len(interseccion) / len(union)  # Jaccard
+    from matching.embeddings import similitud_coseno
+    return similitud_coseno(a.color_principal, b.color_principal)
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

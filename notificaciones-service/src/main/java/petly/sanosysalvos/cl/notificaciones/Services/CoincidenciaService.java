@@ -1,21 +1,20 @@
 package petly.sanosysalvos.cl.notificaciones.Services;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import petly.sanosysalvos.cl.notificaciones.DTO.CoincidenciaEventoDTO;
-import petly.sanosysalvos.cl.notificaciones.DTO.ReporteDetalleDTO;
-import petly.sanosysalvos.cl.notificaciones.Model.Coincidencia;
-import petly.sanosysalvos.cl.notificaciones.Model.EstadoCoincidencia;
-import petly.sanosysalvos.cl.notificaciones.Repository.CoincidenciaRepository;
-
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import petly.sanosysalvos.cl.notificaciones.DTO.CoincidenciaEventoDTO;
+import petly.sanosysalvos.cl.notificaciones.DTO.ReporteDetalleDTO;
+import petly.sanosysalvos.cl.notificaciones.Model.Coincidencia;
+import petly.sanosysalvos.cl.notificaciones.Repository.CoincidenciaRepository;
 
 @Service
 @Transactional
@@ -31,6 +30,7 @@ public class CoincidenciaService {
     private String reportesUrl;
 
     public void procesarEvento(CoincidenciaEventoDTO evento) {
+
         if (coincidenciaRepository.findByCoincidenciaIdRef(evento.getCoincidenciaId()).isPresent()) {
             log.info("Coincidencia {} ya procesada, ignorando duplicado", evento.getCoincidenciaId());
             return;
@@ -50,7 +50,6 @@ public class CoincidenciaService {
             .reportePerdidoId(evento.getReportePerdidoId())
             .reporteEncontradoId(evento.getReporteEncontradoId())
             .score(evento.getScore())
-            .estado(EstadoCoincidencia.PENDIENTE)
             .runUsuarioPerdido(runUsuarioPerdido)
             .runUsuarioEncontrado(runUsuarioEncontrado)
             .fechaCreacion(LocalDateTime.now())
@@ -81,31 +80,6 @@ public class CoincidenciaService {
 
         log.info("Coincidencia {} procesada. runPerdido={}, runEncontrado={}, score={}%",
             evento.getCoincidenciaId(), runUsuarioPerdido, runUsuarioEncontrado, porcentaje);
-    }
-
-    public Coincidencia confirmarCoincidencia(Long id) {
-        Coincidencia coincidencia = buscarPorId(id);
-        if (coincidencia.getEstado() != EstadoCoincidencia.PENDIENTE) {
-            throw new IllegalStateException("Solo se pueden confirmar coincidencias en estado PENDIENTE");
-        }
-        coincidencia.setEstado(EstadoCoincidencia.CONFIRMADA);
-        coincidencia.setFechaResolucion(LocalDateTime.now());
-        return coincidenciaRepository.save(coincidencia);
-    }
-
-    public Coincidencia rechazarCoincidencia(Long id) {
-        Coincidencia coincidencia = buscarPorId(id);
-        if (coincidencia.getEstado() != EstadoCoincidencia.PENDIENTE) {
-            throw new IllegalStateException("Solo se pueden rechazar coincidencias en estado PENDIENTE");
-        }
-        coincidencia.setEstado(EstadoCoincidencia.DESCARTADA);
-        coincidencia.setFechaResolucion(LocalDateTime.now());
-        return coincidenciaRepository.save(coincidencia);
-    }
-
-    public Coincidencia buscarPorId(Long id) {
-        return coincidenciaRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Coincidencia no encontrada con ID: " + id));
     }
 
     public List<Coincidencia> buscarPorUsuario(Integer runUsuario) {

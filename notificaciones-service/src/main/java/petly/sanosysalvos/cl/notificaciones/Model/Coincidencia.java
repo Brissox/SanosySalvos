@@ -2,8 +2,6 @@ package petly.sanosysalvos.cl.notificaciones.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,10 +39,6 @@ public class Coincidencia {
     @Column(name = "SCORE", nullable = false)
     private Double score;
 
-    @Column(name = "ESTADO", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EstadoCoincidencia estado;
-
     @Column(name = "RUN_USUARIO_PERDIDO")
     private Integer runUsuarioPerdido;
 
@@ -53,7 +47,4 @@ public class Coincidencia {
 
     @Column(name = "FECHA_CREACION", nullable = false)
     private LocalDateTime fechaCreacion;
-
-    @Column(name = "FECHA_RESOLUCION")
-    private LocalDateTime fechaResolucion;
 }
