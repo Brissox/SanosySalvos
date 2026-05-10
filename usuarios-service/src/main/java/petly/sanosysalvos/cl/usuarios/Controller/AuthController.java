@@ -54,6 +54,7 @@ public class AuthController {
         //Respuesta exito
         return ResponseEntity.ok(Map.of(
                 "token", token,
+                "run", usuario.getRun(),
                 "correo", usuario.getCorreo(),
                 "nombre", usuario.getNombre()
         ));
