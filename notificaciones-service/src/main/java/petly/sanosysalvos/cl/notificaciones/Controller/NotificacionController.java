@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import petly.sanosysalvos.cl.notificaciones.Model.Notificacion;
+import petly.sanosysalvos.cl.notificaciones.Config.JwtUtil;
 import petly.sanosysalvos.cl.notificaciones.Services.NotificacionServices;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,10 +22,16 @@ import java.util.Map;
 public class NotificacionController {
 
     private final NotificacionServices notificacionServices;
+    private final JwtUtil jwtUtil;
 
     @GetMapping
-    public ResponseEntity<List<Notificacion>> listarTodas() {
-        return ResponseEntity.ok(notificacionServices.listarTodas());
+    public ResponseEntity<?> listarPorUsuario(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Long idUsuario = jwtUtil.extractUserId(authHeader.replace("Bearer ", ""));
+            return ResponseEntity.ok(notificacionServices.buscarPorUsuario(idUsuario));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
     }
 
     @GetMapping("/{id}")
@@ -37,19 +43,24 @@ public class NotificacionController {
         }
     }
 
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<Notificacion>> buscarPorUsuario(@PathVariable Long idUsuario) {
-        return ResponseEntity.ok(notificacionServices.buscarPorUsuario(idUsuario));
+    @GetMapping("/no-leidas")
+    public ResponseEntity<?> buscarNoLeidas(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Long idUsuario = jwtUtil.extractUserId(authHeader.replace("Bearer ", ""));
+            return ResponseEntity.ok(notificacionServices.buscarNoLeidas(idUsuario));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
     }
 
-    @GetMapping("/usuario/{idUsuario}/no-leidas")
-    public ResponseEntity<List<Notificacion>> buscarNoLeidas(@PathVariable Long idUsuario) {
-        return ResponseEntity.ok(notificacionServices.buscarNoLeidas(idUsuario));
-    }
-
-    @GetMapping("/usuario/{idUsuario}/contador")
-    public ResponseEntity<Map<String, Long>> contarNoLeidas(@PathVariable Long idUsuario) {
-        return ResponseEntity.ok(Map.of("noLeidas", notificacionServices.contarNoLeidas(idUsuario)));
+    @GetMapping("/contador")
+    public ResponseEntity<?> contarNoLeidas(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Long idUsuario = jwtUtil.extractUserId(authHeader.replace("Bearer ", ""));
+            return ResponseEntity.ok(Map.of("noLeidas", notificacionServices.contarNoLeidas(idUsuario)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
     }
 
     @PatchMapping("/{id}/leer")
@@ -61,9 +72,14 @@ public class NotificacionController {
         }
     }
 
-    @PatchMapping("/usuario/{idUsuario}/leer-todas")
-    public ResponseEntity<Map<String, Integer>> marcarTodasComoLeidas(@PathVariable Long idUsuario) {
-        return ResponseEntity.ok(Map.of("actualizadas", notificacionServices.marcarTodasComoLeidas(idUsuario)));
+    @PatchMapping("/leer-todas")
+    public ResponseEntity<?> marcarTodasComoLeidas(@RequestHeader("Authorization") String authHeader) {
+        try {
+            Long idUsuario = jwtUtil.extractUserId(authHeader.replace("Bearer ", ""));
+            return ResponseEntity.ok(Map.of("actualizadas", notificacionServices.marcarTodasComoLeidas(idUsuario)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
     }
 
     @DeleteMapping("/{id}")
