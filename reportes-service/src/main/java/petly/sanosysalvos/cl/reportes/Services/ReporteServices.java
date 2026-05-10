@@ -189,17 +189,68 @@ public class ReporteServices {
     }
 
     // LISTAR Reportes por Tipo
-    public List<Reporte> filtrarPorTipo(TipoReporte tipoReporte) {
-        return reporterepository.findByTipoReporte(tipoReporte);
-    }
+    public List<ReporteGeoDTO> filtrarPorTipo(TipoReporte tipoReporte) {
+        List<Reporte> reportes = reporterepository.findByTipoReporte(tipoReporte);
+        return reportes.stream().map((Reporte r) -> {
+
+        GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+
+        ReporteGeoDTO dto = new ReporteGeoDTO();
+
+        dto.setId(r.getIdreporte());
+        dto.setTipoReporte(r.getTipoReporte().name());
+        dto.setEstadoReporte(r.getEstadoReporte().name());
+        dto.setFechaReporte(r.getFechaReporte());
+        dto.setDescripcion(r.getDescripcion());
+        dto.setContacto(r.getContacto());
+        dto.setImagenUrl(r.getImagenUrl());
+        dto.setLatitud(geo.getLatitud());
+        dto.setLongitud(geo.getLongitud());
+        dto.setEspecie(r.getEspecie().name());
+        dto.setRaza(r.getRaza());
+        dto.setColorPrincipal(r.getColorPrincipal());
+        dto.setTamanio(r.getTamanio().name());
+        dto.setSexo(r.getSexo().name());
+        dto.setEdadAproximada(r.getEdadAproximada());
+
+        return dto;
+
+    }).collect(Collectors.toList());
+}
 
     // LISTAR Reportes por Estado
-    public List<Reporte> filtrarPorEstado(EstadoReporte estadoReporte) {
-        return reporterepository.findByEstadoReporte(estadoReporte);
-    }
+    public List<ReporteGeoDTO> filtrarPorEstado(EstadoReporte estadoReporte) {
+        List<Reporte> reportes = reporterepository.findByEstadoReporte(estadoReporte);
+        return reportes.stream().map((Reporte r) -> {
+
+        GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+
+        ReporteGeoDTO dto = new ReporteGeoDTO();
+
+        dto.setId(r.getIdreporte());
+        dto.setTipoReporte(r.getTipoReporte().name());
+        dto.setEstadoReporte(r.getEstadoReporte().name());
+        dto.setFechaReporte(r.getFechaReporte());
+        dto.setDescripcion(r.getDescripcion());
+        dto.setContacto(r.getContacto());
+        dto.setImagenUrl(r.getImagenUrl());
+        dto.setLatitud(geo.getLatitud());
+        dto.setLongitud(geo.getLongitud());
+        dto.setEspecie(r.getEspecie().name());
+        dto.setRaza(r.getRaza());
+        dto.setColorPrincipal(r.getColorPrincipal());
+        dto.setTamanio(r.getTamanio().name());
+        dto.setSexo(r.getSexo().name());
+        dto.setEdadAproximada(r.getEdadAproximada());
+
+        return dto;
+
+    }).collect(Collectors.toList());
+}
+
 
     public List<ReporteGeoDTO> buscarPorRunUsuario(Integer runUsuario) {
-        
+
     List<Reporte> reportes = reporterepository.findByRunUsuario(runUsuario);
 
     return reportes.stream().map((Reporte r) -> {

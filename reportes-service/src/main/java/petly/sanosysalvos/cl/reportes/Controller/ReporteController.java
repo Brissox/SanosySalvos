@@ -85,7 +85,7 @@ public class ReporteController {
 
     // FILTRAR POR TIPO
     @GetMapping("/filtrar/tipo")
-    public ResponseEntity<List<Reporte>> filtrarPorTipo(
+    public ResponseEntity<List<ReporteGeoDTO>> filtrarPorTipo(
             @RequestParam TipoReporte tipoReporte) {
         try {
             return ResponseEntity.ok(
@@ -97,7 +97,7 @@ public class ReporteController {
 
     // FILTRAR POR ESTADO
     @GetMapping("/filtrar/estado")
-    public ResponseEntity<List<Reporte>> filtrarPorEstado(
+    public ResponseEntity<List<ReporteGeoDTO>> filtrarPorEstado(
             @RequestParam EstadoReporte estadoReporte) {
         try {
             return ResponseEntity.ok(
