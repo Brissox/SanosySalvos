@@ -17,10 +17,6 @@ public class NotificacionServices {
 
     private final NotificacionRepository notificacionRepository;
 
-    public List<Notificacion> listarTodas() {
-        return notificacionRepository.findAll();
-    }
-
     public Notificacion buscarPorId(Long id) {
         return notificacionRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Notificacion no encontrada con ID: " + id));
