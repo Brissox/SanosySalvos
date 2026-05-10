@@ -108,7 +108,7 @@ public class ReporteController {
     }
     
     @GetMapping("/filtrar/{run}")
-    public ResponseEntity<List<Reporte>> buscarPorRunUsuario(
+    public ResponseEntity<List<ReporteGeoDTO>> buscarPorRunUsuario(
             @PathVariable Integer run) {
         try {
             return ResponseEntity.ok(

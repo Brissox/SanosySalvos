@@ -198,8 +198,34 @@ public class ReporteServices {
         return reporterepository.findByEstadoReporte(estadoReporte);
     }
 
-    public List<Reporte> buscarPorRunUsuario(Integer runUsuario) {
-    return reporterepository.findByRunUsuario(runUsuario);
-    }
+    public List<ReporteGeoDTO> buscarPorRunUsuario(Integer runUsuario) {
+        
+    List<Reporte> reportes = reporterepository.findByRunUsuario(runUsuario);
 
+    return reportes.stream().map((Reporte r) -> {
+
+        GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+
+        ReporteGeoDTO dto = new ReporteGeoDTO();
+
+        dto.setId(r.getIdreporte());
+        dto.setTipoReporte(r.getTipoReporte().name());
+        dto.setEstadoReporte(r.getEstadoReporte().name());
+        dto.setFechaReporte(r.getFechaReporte());
+        dto.setDescripcion(r.getDescripcion());
+        dto.setContacto(r.getContacto());
+        dto.setImagenUrl(r.getImagenUrl());
+        dto.setLatitud(geo.getLatitud());
+        dto.setLongitud(geo.getLongitud());
+        dto.setEspecie(r.getEspecie().name());
+        dto.setRaza(r.getRaza());
+        dto.setColorPrincipal(r.getColorPrincipal());
+        dto.setTamanio(r.getTamanio().name());
+        dto.setSexo(r.getSexo().name());
+        dto.setEdadAproximada(r.getEdadAproximada());
+
+        return dto;
+
+    }).collect(Collectors.toList());
+}
 }
