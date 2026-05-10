@@ -19,6 +19,10 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.get("run", Long.class);
+        Object run = claims.get("run");
+        if (run instanceof Integer integer) {
+            return integer.longValue();
+        }
+        return (Long) run;
     }
 }

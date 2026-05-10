@@ -125,6 +125,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: "220206Cj*"
       SPRING_RABBITMQ_HOST: rabbitmq
+      SERVICES_REPORTES_URL: http://reportes-service:8081
     depends_on:
       postgres:
         condition: service_healthy
