@@ -2,7 +2,7 @@ name: Build and Push Backend Images
 
 on:
   push:
-    branches: [Docker-back]
+    branches: [Develop]
 
 jobs:
   build-and-push:
