@@ -1,0 +1,187 @@
+services:
+
+  postgres:
+    image: postgis/postgis:16-3.4-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "220206Cj*"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - petly-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    networks:
+      - petly-net
+
+  api-gateway:
+    image: carlitosmul/api-gateway:latest
+    ports:
+      - "8080:8080"
+    environment:
+      USUARIOS_SERVICE_URL: http://usuarios-service:8084
+      REPORTES_SERVICE_URL: http://reportes-service:8081
+      GEO_SERVICE_URL: http://geolocalizacion-service:8082
+      MASCOTAS_SERVICE_URL: http://mascotas-service:8083
+      COINCIDENCIAS_SERVICE_URL: http://coincidencias-service:8085
+      NOTIFICACIONES_SERVICE_URL: http://notificaciones-service:8086
+    depends_on:
+      usuarios-service:
+        condition: service_started
+      reportes-service:
+        condition: service_started
+      mascotas-service:
+        condition: service_started
+      geolocalizacion-service:
+        condition: service_started
+      coincidencias-service:
+        condition: service_started
+      notificaciones-service:
+        condition: service_started
+    networks:
+      - petly-net
+
+  usuarios-service:
+    image: carlitosmul/usuarios-service:latest
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_Usuarios
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  reportes-service:
+    image: carlitosmul/reportes-service:latest
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_Reportes
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+      GEO_SERVICE_URL: http://geolocalizacion-service:8082
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  mascotas-service:
+    image: carlitosmul/mascotas-service:latest
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_Mascotas
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  geolocalizacion-service:
+    image: carlitosmul/geolocalizacion-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_Geo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  notificaciones-service:
+    image: carlitosmul/notificaciones-service:latest
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bd_notificaciones
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "220206Cj*"
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  coincidencias-service:
+    image: carlitosmul/coincidencias-service:latest
+    ports:
+      - "8085:8085"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: bd_coincidencias
+      DB_USER: postgres
+      DB_PASSWORD: "220206Cj*"
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      REDIS_URL: redis://default:H2tNxFKMf9VAu860c3Ur5rcNA4wj6fkM@redis-11417.crce181.sa-east-1-2.ec2.cloud.redislabs.com:11417
+      REDIS_TTL_REPORTE: 604800
+      REDIS_TTL_QUERY: 60
+      QUEUE_REPORTE_NUEVO: reporte.nuevo
+      QUEUE_MATCHING_RESULTADO: matching.resultado
+      QUEUE_NOTIFICACION: notificacion.coincidencia
+      SCORE_THRESHOLD: 0.85
+      MAX_CANDIDATOS: 200
+      DIAS_MAX_DIFERENCIA: 60
+      KM_MAX_DISTANCIA: 50.0
+      EMBEDDING_MODEL: paraphrase-multilingual-MiniLM-L12-v2
+      PESO_ESPECIE: 0.30
+      PESO_RAZA: 0.20
+      PESO_COLOR: 0.15
+      PESO_UBICACION: 0.15
+      PESO_TEMPORAL: 0.10
+      PESO_DESCRIPCION: 0.10
+      APP_PORT: 8085
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - petly-net
+
+  frontend:
+    image: carlitosmul/petly-frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      PORT: 80
+    networks:
+      - petly-net
+
+volumes:
+  postgres_data:
+
+networks:
+  petly-net:
+    driver: bridge
