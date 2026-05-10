@@ -7,7 +7,7 @@ from config import settings
 password = quote_plus(settings.db_password)
 
 _url = (
-    f"postgresql+psycopg2://{settings.db_user}:{password}"
+    f"postgresql+pg8000://{settings.db_user}:{password}"
     f"@{settings.db_host}:{settings.db_port}/{settings.db_name}"
 )
 
