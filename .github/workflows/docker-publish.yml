@@ -1,0 +1,85 @@
+name: Build and Push Backend Images
+
+on:
+  push:
+    branches: [Docker-back]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push api-gateway
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Api-Gateway
+          push: true
+          tags: carlitosmul/api-gateway:latest
+          cache-from: type=gha,scope=api-gateway
+          cache-to: type=gha,mode=max,scope=api-gateway
+
+      - name: Build and push reportes-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./reportes-service
+          push: true
+          tags: carlitosmul/reportes-service:latest
+          cache-from: type=gha,scope=reportes-service
+          cache-to: type=gha,mode=max,scope=reportes-service
+
+      - name: Build and push geolocalizacion-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./geolocalizacion-service
+          push: true
+          tags: carlitosmul/geolocalizacion-service:latest
+          cache-from: type=gha,scope=geolocalizacion-service
+          cache-to: type=gha,mode=max,scope=geolocalizacion-service
+
+      - name: Build and push mascotas-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./mascotas-service
+          push: true
+          tags: carlitosmul/mascotas-service:latest
+          cache-from: type=gha,scope=mascotas-service
+          cache-to: type=gha,mode=max,scope=mascotas-service
+
+      - name: Build and push usuarios-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./usuarios-service
+          push: true
+          tags: carlitosmul/usuarios-service:latest
+          cache-from: type=gha,scope=usuarios-service
+          cache-to: type=gha,mode=max,scope=usuarios-service
+
+      - name: Build and push coincidencias-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./coincidencias-service
+          push: true
+          tags: carlitosmul/coincidencias-service:latest
+          cache-from: type=gha,scope=coincidencias-service
+          cache-to: type=gha,mode=max,scope=coincidencias-service
+
+      - name: Build and push notificaciones-service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./notificaciones-service
+          push: true
+          tags: carlitosmul/notificaciones-service:latest
+          cache-from: type=gha,scope=notificaciones-service
+          cache-to: type=gha,mode=max,scope=notificaciones-service
