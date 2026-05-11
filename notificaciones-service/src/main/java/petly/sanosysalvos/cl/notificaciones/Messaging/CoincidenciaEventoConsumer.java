@@ -23,7 +23,6 @@ public class CoincidenciaEventoConsumer {
         } catch (Exception e) {
             log.error("Error procesando evento coincidencia_id={}: {}",
                 evento.getCoincidenciaId(), e.getMessage());
-            throw e;
         }
     }
 }
