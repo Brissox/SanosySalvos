@@ -3,6 +3,10 @@ package petly.sanosysalvos.cl.reportes.Services;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -33,6 +37,7 @@ public class ReporteServices {
     private final GeoClient geoClient;
     private final OracleStorageService oracleStorageService;
     private final ReporteEventoPublisher reporteEventoPublisher;
+    private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
     public ReporteServices(ReporteRepository reporterepository, GeoClient geoClient,
             OracleStorageService oracleStorageService, ReporteEventoPublisher reporteEventoPublisher) {
@@ -61,7 +66,7 @@ public class ReporteServices {
         reporterepository.deleteById(id);
     }
 
-    // Eliminar reporte + geo
+    // Cerrar reporte (soft delete): libera recursos pero mantiene el registro
     public void eliminarGeo(Long id) {
 
         Reporte reporte = reporterepository.findById(id)
@@ -70,7 +75,8 @@ public class ReporteServices {
         Long localizacionId = reporte.getLocalizacionId();
         String imagenUrl = reporte.getImagenUrl();
 
-        reporterepository.delete(reporte);
+        reporte.setEstadoReporte(EstadoReporte.CERRADO);
+        reporterepository.save(reporte);
 
         if (localizacionId != null) {
             geoClient.eliminarDTO(localizacionId);
@@ -79,23 +85,42 @@ public class ReporteServices {
         if (imagenUrl != null && !imagenUrl.isEmpty()) {
             oracleStorageService.eliminarImagen(imagenUrl);
         }
+
+        reporteEventoPublisher.publicarReporteCerrado(id);
     }
 
     // Crear
     public Reporte crear(ReporteRequest dto, MultipartFile imagen, Integer run) throws IOException {
 
-        // Crear geo
         GeoRequest geoReq = new GeoRequest();
         geoReq.setLatitud(dto.getLatitud());
         geoReq.setLongitud(dto.getLongitud());
 
-        GeoResponse geoRes = geoClient.crear(geoReq);
+        // Ejecutar llamada a geo y subida de imagen en paralelo (virtual threads)
+        CompletableFuture<GeoResponse> geoFuture = CompletableFuture
+                .supplyAsync(() -> geoClient.crear(geoReq), executor);
 
-        // Subir imagen si existe
-        String imagenUrl = null;
-        if (imagen != null && !imagen.isEmpty()) {
-            imagenUrl = oracleStorageService.subirImagen(imagen);
+        CompletableFuture<String> imagenFuture = (imagen != null && !imagen.isEmpty())
+                ? CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return oracleStorageService.subirImagen(imagen);
+                    } catch (IOException e) {
+                        throw new CompletionException(e);
+                    }
+                }, executor)
+                : CompletableFuture.completedFuture(null);
+
+        try {
+            CompletableFuture.allOf(geoFuture, imagenFuture).join();
+        } catch (CompletionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof IOException ioEx) throw ioEx;
+            if (cause instanceof RuntimeException rtEx) throw rtEx;
+            throw new RuntimeException(cause);
         }
+
+        GeoResponse geoRes = geoFuture.join();
+        String imagenUrl = imagenFuture.join();
 
         // Crear reporte
         Reporte r = new Reporte();
@@ -127,6 +152,7 @@ public class ReporteServices {
         r.setEdadAproximada(dto.getEdadAproximada());
         r.setEstadoReporte(EstadoReporte.ACTIVO);
         r.setRunUsuario(run);
+        r.setFechaLimite(calcularFechaLimite(TipoReporte.valueOf(dto.getTipoReporte())));
 
         Reporte saved = reporterepository.save(r);
 
@@ -247,6 +273,32 @@ public class ReporteServices {
     }).collect(Collectors.toList());
 }
 
+
+    private LocalDateTime calcularFechaLimite(TipoReporte tipo) {
+        int dias = switch (tipo) {
+            case AVISTAMIENTO -> 14;
+            case ENCONTRADA -> 30;
+            case PERDIDA -> 60;
+        };
+        return LocalDateTime.now().plusDays(dias);
+    }
+
+    public void renovarReporte(Long id) {
+        Reporte reporte = reporterepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reporte no encontrado: " + id));
+        if (reporte.getEstadoReporte() == EstadoReporte.CERRADO) {
+            throw new RuntimeException("No se puede renovar un reporte cerrado");
+        }
+        reporte.setFechaLimite(calcularFechaLimite(reporte.getTipoReporte()));
+        reporterepository.save(reporte);
+    }
+
+    public void actualizarEstado(Long id, EstadoReporte nuevoEstado) {
+        Reporte reporte = reporterepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reporte no encontrado: " + id));
+        reporte.setEstadoReporte(nuevoEstado);
+        reporterepository.save(reporte);
+    }
 
     public List<ReporteGeoDTO> buscarPorRunUsuario(Integer runUsuario) {
 
