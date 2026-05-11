@@ -55,6 +55,28 @@ public class NotificacionServices {
     }
 
     @Transactional
+    public Notificacion crearNotificacionVencimiento(
+            Long idUsuario,
+            Long idReporte,
+            String tipoReporte,
+            String fechaLimite) {
+        String titulo = "Tu reporte está por vencer";
+        String mensaje = String.format(
+            "Tu reporte de mascota %s vence el %s. Renuévalo para seguir recibiendo coincidencias.",
+            tipoReporte.toLowerCase(), fechaLimite);
+        Notificacion notificacion = Notificacion.builder()
+            .titulo(titulo)
+            .mensaje(mensaje)
+            .fechaCreacion(LocalDateTime.now())
+            .leida(false)
+            .tipo(TipoNotificacion.REPORTE_PROXIMO_VENCER)
+            .idUsuario(idUsuario)
+            .idReporte(idReporte)
+            .build();
+        return notificacionRepository.save(notificacion);
+    }
+
+    @Transactional
     public Notificacion crearNotificacionCoincidencia(
             Long idUsuario,
             Long idReporte,

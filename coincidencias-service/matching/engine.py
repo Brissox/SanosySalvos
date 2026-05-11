@@ -40,6 +40,15 @@ def ejecutar_matching(
     resultados: list[ResultadoMatch] = []
 
     for candidato in candidatos:
+        if candidato.tipo_reporte == nuevo_reporte.tipo_reporte:
+            logger.warning(
+                "Candidato %d tiene el mismo tipo que el reporte %d (%s), ignorando",
+                candidato.reporte_id,
+                nuevo_reporte.reporte_id,
+                nuevo_reporte.tipo_reporte,
+            )
+            continue
+
         desglose = calcular_score(nuevo_reporte, candidato)
 
         if desglose.total < settings.score_threshold:

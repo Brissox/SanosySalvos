@@ -298,6 +298,18 @@ public class ReporteServices {
                 .orElseThrow(() -> new RuntimeException("Reporte no encontrado: " + id));
         reporte.setEstadoReporte(nuevoEstado);
         reporterepository.save(reporte);
+
+        if (nuevoEstado == EstadoReporte.RESUELTO) {
+            Long localizacionId = reporte.getLocalizacionId();
+            String imagenUrl = reporte.getImagenUrl();
+            if (localizacionId != null) {
+                geoClient.eliminarDTO(localizacionId);
+            }
+            if (imagenUrl != null && !imagenUrl.isEmpty()) {
+                oracleStorageService.eliminarImagen(imagenUrl);
+            }
+            reporteEventoPublisher.publicarReporteCerrado(id);
+        }
     }
 
     public List<ReporteGeoDTO> buscarPorRunUsuario(Integer runUsuario) {

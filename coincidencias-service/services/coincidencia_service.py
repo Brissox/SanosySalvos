@@ -139,10 +139,10 @@ async def _candidatos_opuestos(nuevo: ReporteEventoDTO) -> list[ReporteEventoDTO
     # Obtener todos los reportes en un único round-trip
     valores = await r.mget(*[f"reporte:{id_}" for id_ in all_ids])
 
+    candidatos = [ReporteEventoDTO.model_validate_json(v) for v in valores if v is not None]
     return [
-        ReporteEventoDTO.model_validate_json(v)
-        for v in valores
-        if v is not None
+        c for c in candidatos
+        if c.tipo_reporte in tipos_opuestos and c.reporte_id != nuevo.reporte_id
     ]
 
 
