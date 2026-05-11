@@ -14,9 +14,17 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.notificacion-coincidencia}")
     private String queueNotificacion;
 
+    @Value("${rabbitmq.queue.reporte-proximo-vencer}")
+    private String queueReporteProximoVencer;
+
     @Bean
     Queue queueNotificacionCoincidencia() {
         return new Queue(queueNotificacion, true);
+    }
+
+    @Bean
+    Queue queueReporteProximoVencer() {
+        return new Queue(queueReporteProximoVencer, true);
     }
 
     @Bean

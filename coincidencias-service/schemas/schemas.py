@@ -80,3 +80,12 @@ class NotificacionCoincidenciaDTO(BaseModel):
     reporte_perdido_id: int
     reporte_encontrado_id: int
     score: float
+
+
+class ActualizarEstadoReporteDTO(BaseModel):
+    """Mensaje publicado a reportes-service para cambiar el estado de un reporte."""
+
+    model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
+
+    reporte_id: int
+    nuevo_estado: str

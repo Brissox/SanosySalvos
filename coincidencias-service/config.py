@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     queue_reporte_nuevo: str = "reporte.nuevo"
     queue_matching_resultado: str = "matching.resultado"
     queue_notificacion: str = "notificacion.coincidencia"
+    queue_actualizar_estado_reporte: str = "reporte.estado.actualizar"
+    queue_reporte_cerrado: str = "reporte.cerrado"
 
     redis_url: str = "redis://localhost:6379"
     redis_ttl_reporte: int = 604800   # 7 días en segundos

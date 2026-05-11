@@ -62,6 +62,7 @@ public class CoincidenciaService {
             notificacionServices.crearNotificacionCoincidencia(
                 runUsuarioPerdido.longValue(),
                 evento.getReportePerdidoId(),
+                evento.getReporteEncontradoId(),
                 saved.getId(),
                 "Posible coincidencia encontrada",
                 "Encontramos un reporte que podria coincidir con tu mascota perdida. Similitud: " + porcentaje + "%"
@@ -72,6 +73,7 @@ public class CoincidenciaService {
             notificacionServices.crearNotificacionCoincidencia(
                 runUsuarioEncontrado.longValue(),
                 evento.getReporteEncontradoId(),
+                evento.getReportePerdidoId(),
                 saved.getId(),
                 "Tu reporte tiene una coincidencia potencial",
                 "El animal encontrado que reportaste podria coincidir con una mascota perdida. Similitud: " + porcentaje + "%"
