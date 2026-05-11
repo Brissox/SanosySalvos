@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
-import petly.sanosysalvos.cl.reportes.Client.GeoClientResiliente;
+import petly.sanosysalvos.cl.reportes.Client.GeoClient;
 import petly.sanosysalvos.cl.reportes.DTO.GeoDTO;
 import petly.sanosysalvos.cl.reportes.DTO.GeoRequest;
 import petly.sanosysalvos.cl.reportes.DTO.GeoResponse;
@@ -35,12 +35,12 @@ import petly.sanosysalvos.cl.reportes.Services.OracleStorageService;
 public class ReporteServices {
 
     private final ReporteRepository reporterepository;
-    private final GeoClientResiliente geoClient;
+    private final GeoClient geoClient;
     private final OracleStorageService oracleStorageService;
     private final ReporteEventoPublisher reporteEventoPublisher;
     private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
-    public ReporteServices(ReporteRepository reporterepository, GeoClientResiliente geoClient,
+    public ReporteServices(ReporteRepository reporterepository, GeoClient geoClient,
             OracleStorageService oracleStorageService, ReporteEventoPublisher reporteEventoPublisher) {
         this.reporterepository = reporterepository;
         this.geoClient = geoClient;
@@ -299,18 +299,6 @@ public class ReporteServices {
                 .orElseThrow(() -> new RuntimeException("Reporte no encontrado: " + id));
         reporte.setEstadoReporte(nuevoEstado);
         reporterepository.save(reporte);
-
-        if (nuevoEstado == EstadoReporte.RESUELTO) {
-            Long localizacionId = reporte.getLocalizacionId();
-            String imagenUrl = reporte.getImagenUrl();
-            if (localizacionId != null) {
-                geoClient.eliminarDTO(localizacionId);
-            }
-            if (imagenUrl != null && !imagenUrl.isEmpty()) {
-                oracleStorageService.eliminarImagen(imagenUrl);
-            }
-            reporteEventoPublisher.publicarReporteCerrado(id);
-        }
     }
 
     public List<ReporteGeoDTO> buscarPorRunUsuario(Integer runUsuario) {
