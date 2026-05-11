@@ -17,9 +17,33 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.reporte-nuevo}")
     private String queueReporteNuevo;
 
+    @Value("${rabbitmq.queue.reporte-estado-actualizar}")
+    private String queueReporteEstadoActualizar;
+
+    @Value("${rabbitmq.queue.reporte-cerrado}")
+    private String queueReporteCerrado;
+
+    @Value("${rabbitmq.queue.reporte-proximo-vencer}")
+    private String queueReporteProximoVencer;
+
     @Bean
     public Queue queueReporteNuevo() {
         return new Queue(queueReporteNuevo, true);
+    }
+
+    @Bean
+    public Queue queueReporteEstadoActualizar() {
+        return new Queue(queueReporteEstadoActualizar, true);
+    }
+
+    @Bean
+    public Queue queueReporteCerrado() {
+        return new Queue(queueReporteCerrado, true);
+    }
+
+    @Bean
+    public Queue queueReporteProximoVencer() {
+        return new Queue(queueReporteProximoVencer, true);
     }
 
     @Bean

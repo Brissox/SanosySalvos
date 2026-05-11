@@ -10,9 +10,10 @@ from cache import redis_client
 from config import settings
 from db.database import Base, SessionLocal, engine
 from messaging.consumer import iniciar_consumer
+from messaging.consumer_cerrado import iniciar_consumer_cerrado
 from messaging.publisher import close as publisher_close
 from messaging.publisher import connect as publisher_connect
-from services.coincidencia_service import procesar_reporte_nuevo
+from services.coincidencia_service import _quitar_reporte_de_cache, procesar_reporte_nuevo
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -26,15 +27,21 @@ async def _on_reporte_nuevo(reporte):
         db.close()
 
 
+async def _on_reporte_cerrado(reporte_id: int):
+    await _quitar_reporte_de_cache(reporte_id)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     await redis_client.connect()
     await publisher_connect()
     consumer_task = asyncio.create_task(iniciar_consumer(_on_reporte_nuevo))
+    consumer_cerrado_task = asyncio.create_task(iniciar_consumer_cerrado(_on_reporte_cerrado))
     logger.info("coincidencias-service iniciado en puerto %d", settings.app_port)
     yield
     consumer_task.cancel()
+    consumer_cerrado_task.cancel()
     await publisher_close()
     await redis_client.close()
 

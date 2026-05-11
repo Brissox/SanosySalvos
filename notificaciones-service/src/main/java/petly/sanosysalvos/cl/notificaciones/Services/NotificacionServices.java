@@ -58,6 +58,7 @@ public class NotificacionServices {
     public Notificacion crearNotificacionCoincidencia(
             Long idUsuario,
             Long idReporte,
+            Long idReporteCoincidencia,
             Long idCoincidencia,
             String titulo,
             String mensaje) {
@@ -69,6 +70,7 @@ public class NotificacionServices {
             .tipo(TipoNotificacion.COINCIDENCIA_POTENCIAL)
             .idUsuario(idUsuario)
             .idReporte(idReporte)
+            .idReporteCoincidencia(idReporteCoincidencia)
             .idCoincidencia(idCoincidencia)
             .build();
         return notificacionRepository.save(notificacion);
