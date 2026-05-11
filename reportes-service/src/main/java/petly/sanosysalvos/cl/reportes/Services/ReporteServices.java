@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
-import petly.sanosysalvos.cl.reportes.Client.GeoClient;
+import petly.sanosysalvos.cl.reportes.Client.GeoClientResiliente;
 import petly.sanosysalvos.cl.reportes.DTO.GeoDTO;
 import petly.sanosysalvos.cl.reportes.DTO.GeoRequest;
 import petly.sanosysalvos.cl.reportes.DTO.GeoResponse;
@@ -24,17 +24,18 @@ import petly.sanosysalvos.cl.reportes.Model.Sexo;
 import petly.sanosysalvos.cl.reportes.Model.Tamanio;
 import petly.sanosysalvos.cl.reportes.Model.TipoReporte;
 import petly.sanosysalvos.cl.reportes.Repository.ReporteRepository;
+import petly.sanosysalvos.cl.reportes.Services.OracleStorageService;
 
 @Service
 @Transactional
 public class ReporteServices {
 
     private final ReporteRepository reporterepository;
-    private final GeoClient geoClient;
+    private final GeoClientResiliente geoClient;
     private final OracleStorageService oracleStorageService;
     private final ReporteEventoPublisher reporteEventoPublisher;
 
-    public ReporteServices(ReporteRepository reporterepository, GeoClient geoClient,
+    public ReporteServices(ReporteRepository reporterepository, GeoClientResiliente geoClient,
             OracleStorageService oracleStorageService, ReporteEventoPublisher reporteEventoPublisher) {
         this.reporterepository = reporterepository;
         this.geoClient = geoClient;
