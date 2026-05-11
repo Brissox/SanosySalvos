@@ -43,8 +43,8 @@ public class GeoClientResiliente {
     }
 
     private GeoDTO fallbackObtener(Long id, Throwable ex) {
-    System.out.println("Fallback obtener geo activado: " + ex.getMessage());
-    throw new RuntimeException("El servicio de geolocalización no está disponible. No se pudo obtener la ubicación.");
+        System.out.println("Fallback obtener geo activado: " + ex.getMessage());
+        return null;
     }
 
     private void fallbackEliminar(Long id, Throwable ex) {
