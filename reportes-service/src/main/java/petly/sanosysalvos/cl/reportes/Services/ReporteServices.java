@@ -190,6 +190,7 @@ public class ReporteServices {
         return reportes.stream().map((Reporte r) -> {
 
             GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+            if (geo == null) return null;
 
             ReporteGeoDTO dto = new ReporteGeoDTO();
 
@@ -211,6 +212,7 @@ public class ReporteServices {
 
             return dto;
         })
+                .filter(dto -> dto != null)
                 .collect(Collectors.toList());
     }
 
@@ -220,6 +222,7 @@ public class ReporteServices {
         return reportes.stream().map((Reporte r) -> {
 
         GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+        if (geo == null) return null;
 
         ReporteGeoDTO dto = new ReporteGeoDTO();
 
@@ -241,7 +244,7 @@ public class ReporteServices {
 
         return dto;
 
-    }).collect(Collectors.toList());
+    }).filter(dto -> dto != null).collect(Collectors.toList());
 }
 
     // LISTAR Reportes por Estado
@@ -250,6 +253,7 @@ public class ReporteServices {
         return reportes.stream().map((Reporte r) -> {
 
         GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+        if (geo == null) return null;
 
         ReporteGeoDTO dto = new ReporteGeoDTO();
 
@@ -271,7 +275,7 @@ public class ReporteServices {
 
         return dto;
 
-    }).collect(Collectors.toList());
+    }).filter(dto -> dto != null).collect(Collectors.toList());
 }
 
 
@@ -320,6 +324,7 @@ public class ReporteServices {
     return reportes.stream().map((Reporte r) -> {
 
         GeoDTO geo = geoClient.obtener(r.getLocalizacionId());
+        if (geo == null) return null;
 
         ReporteGeoDTO dto = new ReporteGeoDTO();
 
@@ -341,6 +346,6 @@ public class ReporteServices {
 
         return dto;
 
-    }).collect(Collectors.toList());
+    }).filter(dto -> dto != null).collect(Collectors.toList());
 }
 }
