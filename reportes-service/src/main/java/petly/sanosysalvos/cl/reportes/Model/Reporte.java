@@ -76,4 +76,7 @@ public class Reporte {
     @Column(name = "EDAD_APROXIMADA", length = 30)
     private Integer edadAproximada;
 
+    @Column(name = "FECHA_LIMITE")
+    private LocalDateTime fechaLimite;
+
 }

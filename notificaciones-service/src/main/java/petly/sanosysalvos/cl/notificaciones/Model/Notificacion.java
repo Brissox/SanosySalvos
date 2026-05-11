@@ -52,4 +52,7 @@ public class Notificacion {
 
     @Column(name = "ID_COINCIDENCIA")
     private Long idCoincidencia;
+
+    @Column(name = "ID_REPORTE_COINCIDENCIA")
+    private Long idReporteCoincidencia;
 }

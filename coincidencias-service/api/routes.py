@@ -6,8 +6,13 @@ from sqlalchemy.orm import Session
 from cache.redis_client import get_client
 from config import settings
 from db.database import get_db
+from db.models import EstadoCoincidencia
 from schemas.schemas import ActualizarEstadoDTO, CoincidenciaResponse
-from services.coincidencia_service import actualizar_estado, listar_por_reporte
+from services.coincidencia_service import (
+    actualizar_estado,
+    aplicar_efectos_cambio_estado,
+    listar_por_reporte,
+)
 
 router = APIRouter(prefix="/coincidencias", tags=["Coincidencias"])
 
@@ -33,16 +38,19 @@ async def get_por_reporte(reporte_id: int, db: Session = Depends(get_db)):
     return resultado
 
 
-@router.patch("/{coincidencia_id}/estado", response_model=CoincidenciaResponse)
+@router.patch("/{coincidencia_id}/estado/{nuevo_estado}", response_model=CoincidenciaResponse)
 async def patch_estado(
     coincidencia_id: int,
-    dto: ActualizarEstadoDTO,
+    nuevo_estado: EstadoCoincidencia,
     db: Session = Depends(get_db),
 ):
     """Permite confirmar o descartar una coincidencia manualmente."""
+    dto = ActualizarEstadoDTO(estado=nuevo_estado)
     resultado = actualizar_estado(coincidencia_id, dto, db)
     if not resultado:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Coincidencia no encontrada")
+
+    await aplicar_efectos_cambio_estado(resultado, dto.estado, db)
 
     # Invalidar caché para ambos reportes involucrados
     r = get_client()

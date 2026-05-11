@@ -6,5 +6,6 @@ public enum TipoNotificacion {
     MASCOTA_ENCONTRADA,
     COINCIDENCIA_POTENCIAL,
     COMENTARIO,
-    SISTEMA
+    SISTEMA,
+    REPORTE_PROXIMO_VENCER
 }
