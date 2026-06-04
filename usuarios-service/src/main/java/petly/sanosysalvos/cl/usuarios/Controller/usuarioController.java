@@ -20,7 +20,7 @@ import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
 @RestController
 @RequestMapping("/petly/usuarios")
-public class usuarioController {
+public class UsuarioController {
       @Autowired
     private usuarioServices usuarioService;
 
@@ -46,7 +46,7 @@ public class usuarioController {
 
     }
     
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity<?> GuardarUsuario(@RequestBody Usuario usuarioGuardar) {
         try{
             Usuario usuarioRegistrar = usuarioService.GuardarUsuario(usuarioGuardar);
