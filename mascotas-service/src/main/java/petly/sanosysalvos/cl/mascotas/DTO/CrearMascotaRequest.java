@@ -3,7 +3,7 @@ package petly.sanosysalvos.cl.mascotas.DTO;
 import lombok.Data;
 
 @Data
-public class MascotaRequest {
+public class CrearMascotaRequest {
     private String chip;
     private String nombre;
     private String sexo;

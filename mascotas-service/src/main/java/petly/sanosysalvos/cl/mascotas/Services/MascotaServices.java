@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
-import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
+import petly.sanosysalvos.cl.mascotas.DTO.CrearMascotaRequest;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Model.TipoMascota;
 import petly.sanosysalvos.cl.mascotas.Repository.MascotaRepository;
@@ -44,7 +44,7 @@ public class MascotaServices {
         mascotaRepository.deleteById(chip);
     }
 
-    public Mascota crearMascota(MascotaRequest request, MultipartFile imagen, Integer run) {
+    public Mascota crearMascota(CrearMascotaRequest request, MultipartFile imagen, Integer run) {
 
         Mascota mascota = new Mascota();
 
@@ -71,7 +71,7 @@ public class MascotaServices {
         return mascotaRepository.save(mascota);
     }
 
-    public Mascota actualizarMascota(String chip, MascotaRequest request, MultipartFile imagen) {
+    public Mascota actualizarMascota(String chip, CrearMascotaRequest request, MultipartFile imagen) {
 
         Mascota mascota = mascotaRepository.findById(chip)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));

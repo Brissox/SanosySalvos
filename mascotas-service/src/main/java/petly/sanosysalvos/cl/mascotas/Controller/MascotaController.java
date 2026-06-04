@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import petly.sanosysalvos.cl.mascotas.Config.JwtUtil;
-import petly.sanosysalvos.cl.mascotas.DTO.MascotaRequest;
+import petly.sanosysalvos.cl.mascotas.DTO.CrearMascotaRequest;
 import petly.sanosysalvos.cl.mascotas.Model.Mascota;
 import petly.sanosysalvos.cl.mascotas.Services.MascotaServices;
 
@@ -44,7 +43,7 @@ public class MascotaController {
         }
     }
 
-    @GetMapping("/{id_mascota}")
+    @GetMapping("/{chip}")
     public ResponseEntity<?> BuscarUnaMascotaPorId(@PathVariable String chip) {
         try {
             Mascota mascota = mascotaService.buscarUnaMascota(chip);
@@ -76,7 +75,7 @@ public class MascotaController {
     @PostMapping(value = "/registrar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registrarMascota(
             @RequestHeader("Authorization") String authHeader,
-            @RequestPart("data") MascotaRequest mascotaRequest,
+            @RequestPart("data") CrearMascotaRequest mascotaRequest,
             @RequestPart(value = "file", required = false) MultipartFile foto) {
 
         try {
@@ -95,7 +94,7 @@ public class MascotaController {
         }
     }
 
-    @DeleteMapping("/{id_mascota}")
+    @DeleteMapping("/{chip}")
     public ResponseEntity<?> EliminarMascota(@PathVariable String chip) {
         try {
             Mascota mascotaBuscada = mascotaService.buscarUnaMascota(chip);
@@ -106,10 +105,10 @@ public class MascotaController {
         }
     }
 
-    @PutMapping(value = "/{id_mascota}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{chip}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> actualizar(
             @PathVariable String chip,
-            @RequestPart("mascota") MascotaRequest request,
+            @RequestPart("mascota") CrearMascotaRequest request,
             @RequestPart(value = "imagen", required = false) MultipartFile imagen) {
 
         try {
