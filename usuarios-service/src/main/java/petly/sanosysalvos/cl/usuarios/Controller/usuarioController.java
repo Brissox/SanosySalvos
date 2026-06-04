@@ -20,7 +20,7 @@ import petly.sanosysalvos.cl.usuarios.Services.usuarioServices;
 
 @RestController
 @RequestMapping("/petly/usuarios")
-public class UsuarioController {
+public class usuarioController {
       @Autowired
     private usuarioServices usuarioService;
 
