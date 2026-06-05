@@ -23,5 +23,7 @@ public interface  ReporteRepository extends JpaRepository<Reporte, Long> {
     List<Reporte> findVencidos(@Param("ahora") LocalDateTime ahora, @Param("estados") List<EstadoReporte> estados);
 
     @Query("SELECT r FROM Reporte r WHERE r.fechaLimite BETWEEN :desde AND :hasta AND r.estadoReporte IN :estados")
-    List<Reporte> findProximosAVencer(@Param("desde") LocalDateTime desde, @Param("hasta") LocalDateTime hasta, @Param("estados") List<EstadoReporte> estados);
+    List<Reporte> findProximosAVencer(@Param("desde") LocalDateTime desde, 
+                                        @Param("hasta") LocalDateTime hasta, 
+                                        @Param("estados") List<EstadoReporte> estados);
 }

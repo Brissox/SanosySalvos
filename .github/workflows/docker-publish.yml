@@ -2,7 +2,7 @@ name: Build and Push Backend Images
 
 on:
   push:
-    branches: [Develop, coincidencias-docker]
+    branches: [Develop, Credential-Keys]
 
 jobs:
   build-and-push:
@@ -21,12 +21,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Write OCI key for reportes-service
+        run: echo "${{ secrets.OCI_PRIVATE_KEY_CONTENT }}" > reportes-service/oci_api_key.pem
+
+      - name: Write OCI key for mascotas-service
+        run: echo "${{ secrets.OCI_PRIVATE_KEY_CONTENT }}" > mascotas-service/oci_api_key.pem
+
       - name: Build and push api-gateway
         uses: docker/build-push-action@v6
         with:
           context: ./Api-Gateway
           push: true
           tags: carlitosmul/api-gateway:latest
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
           cache-from: type=gha,scope=api-gateway
           cache-to: type=gha,mode=max,scope=api-gateway
 
@@ -36,6 +44,13 @@ jobs:
           context: ./reportes-service
           push: true
           tags: carlitosmul/reportes-service:latest
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OCI_USER_ID=${{ secrets.OCI_USER_ID }}
+            OCI_TENANCY_ID=${{ secrets.OCI_TENANCY_ID }}
+            OCI_FINGERPRINT=${{ secrets.OCI_FINGERPRINT }}
+            OCI_NAMESPACE=${{ secrets.OCI_NAMESPACE }}
+            OCI_BUCKET=${{ secrets.OCI_BUCKET }}
           cache-from: type=gha,scope=reportes-service
           cache-to: type=gha,mode=max,scope=reportes-service
 
@@ -54,6 +69,13 @@ jobs:
           context: ./mascotas-service
           push: true
           tags: carlitosmul/mascotas-service:latest
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OCI_USER_ID=${{ secrets.OCI_USER_ID }}
+            OCI_TENANCY_ID=${{ secrets.OCI_TENANCY_ID }}
+            OCI_FINGERPRINT=${{ secrets.OCI_FINGERPRINT }}
+            OCI_NAMESPACE=${{ secrets.OCI_NAMESPACE }}
+            OCI_BUCKET=${{ secrets.OCI_BUCKET }}
           cache-from: type=gha,scope=mascotas-service
           cache-to: type=gha,mode=max,scope=mascotas-service
 
@@ -63,6 +85,8 @@ jobs:
           context: ./usuarios-service
           push: true
           tags: carlitosmul/usuarios-service:latest
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
           cache-from: type=gha,scope=usuarios-service
           cache-to: type=gha,mode=max,scope=usuarios-service
 
@@ -81,5 +105,7 @@ jobs:
           context: ./notificaciones-service
           push: true
           tags: carlitosmul/notificaciones-service:latest
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
           cache-from: type=gha,scope=notificaciones-service
           cache-to: type=gha,mode=max,scope=notificaciones-service

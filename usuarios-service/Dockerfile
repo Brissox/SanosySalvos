@@ -8,5 +8,9 @@ RUN mvn package -DskipTests -B -q
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+
+ARG JWT_SECRET
+ENV JWT_SECRET=${JWT_SECRET}
+
 EXPOSE 8084
 ENTRYPOINT ["java", "-jar", "app.jar"]
