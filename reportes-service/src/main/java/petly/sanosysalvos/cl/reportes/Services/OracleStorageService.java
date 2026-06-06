@@ -22,6 +22,13 @@ public class OracleStorageService {
     private final String bucketName;
     private final String region;
 
+    OracleStorageService(ObjectStorageClient client, String namespace, String bucketName, String region) {
+    this.client = client;
+    this.namespace = namespace;
+    this.bucketName = bucketName;
+    this.region = region;
+}
+
     public OracleStorageService(
             @Value("${OCI_NAMESPACE}") String namespace,
             @Value("${OCI_BUCKET}") String bucketName,
