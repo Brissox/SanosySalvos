@@ -38,6 +38,10 @@ public class JwtFilter extends OncePerRequestFilter{
             filterChain.doFilter(request, response);
             return;
         }
+        if (path.startsWith("/fallback/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (path.equals("/petly/auth/login") || path.equals("/petly/usuarios/registrar")) {
             filterChain.doFilter(request, response);
