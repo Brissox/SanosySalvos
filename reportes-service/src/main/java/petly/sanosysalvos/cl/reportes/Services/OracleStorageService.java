@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,13 @@ public class OracleStorageService {
     private final String bucketName;
     private final String region;
 
+    OracleStorageService(ObjectStorageClient client, String namespace, String bucketName, String region) {
+    this.client = client;
+    this.namespace = namespace;
+    this.bucketName = bucketName;
+    this.region = region;
+}
+@Autowired
     public OracleStorageService(
             @Value("${OCI_NAMESPACE}") String namespace,
             @Value("${OCI_BUCKET}") String bucketName,
