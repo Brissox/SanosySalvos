@@ -97,7 +97,7 @@ public class ReporteServices {
         geoReq.setLatitud(dto.getLatitud());
         geoReq.setLongitud(dto.getLongitud());
 
-        // Ejecutar llamada a geo y subida de imagen en paralelo (virtual threads)
+        
         CompletableFuture<GeoResponse> geoFuture = CompletableFuture
                 .supplyAsync(() -> geoClient.crear(geoReq), executor);
 
