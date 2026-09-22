@@ -1,11 +1,9 @@
 package petly.sanosysalvos.cl.mascotas.Model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -13,41 +11,46 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="MASCOTA")
+@Table(name = "MASCOTA")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
 public class Mascota {
 
-    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_MASCOTA")
-    private long id_mascota;
+    @Column(name = "CHIP", unique = true, length = 50)
+    private String chip;
+
+    @Column(name = "RUNUSUARIO", length = 9)
+    private Integer runUsuario;
 
     @Column(name = "NOMBRE", nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "NUMERO_MICROCHIP", unique = true, length = 50)
-    private String numero_microchip;
-
-    @Column(name = "ESPECIE", nullable = false, length = 30)
-    private String especie;
-
     @Column(name = "SEXO", nullable = false, length = 10)
     private String sexo;
 
-    @Column(name = "RAZA", length = 50)
+    @Column(name = "RAZA", nullable = false, length = 50)
     private String raza;
 
-    @Column(name = "COLOR", length = 50)
+    @Column(name = "COLOR", nullable = false, length = 50)
     private String color;
 
-    @Column(name = "FECHA_NACIMIENTO")
-    private LocalDate fecha_nacimiento;
+    @Column(name = "EDAD")
+    private Integer edad;
 
-    @Column(name = "ESTADO_REPRODUCTIVO", length = 30)
-    private String estado_reproductivo;
-    
-    }
+    @Column(name = "TIPO", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TipoMascota tipo;
+
+    @Column(name = "OTROTIPO", length = 100)
+    private String otroTipo;
+
+    @Column(name = "DESCRIPCION", nullable = false, length = 255)
+    private String descripcion;
+
+    @Column(name = "IMAGEN_URL")
+    private String imagenUrl;
+
+}

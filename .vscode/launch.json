@@ -19,6 +19,60 @@
             "mainClass": "petly.sanosysalvos.cl.mascotas.MascotasServiceApplication",
             "projectName": "mascotas-service",
             "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57755 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=mascotas-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GeolocalizacionServiceApplication<geolocalizacion-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.geolocalizacion.GeolocalizacionServiceApplication",
+            "projectName": "geolocalizacion-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57762 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=geolocalizacion-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ReportesServiceApplication<reportes-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.reportes.ReportesServiceApplication",
+            "projectName": "reportes-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57725 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=reportes-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-NotificacionesServiceApplication<notificaciones-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.notificaciones.NotificacionesServiceApplication",
+            "projectName": "notificaciones-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56927 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=notificaciones-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CoincidenciasServiceApplication<coincidencias-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.coincidencias.CoincidenciasServiceApplication",
+            "projectName": "coincidencias-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiGatewayApplication<Api-Gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "petly.sanosysalvos.cl.Api_Gateway.ApiGatewayApplication",
+            "projectName": "Api-Gateway",
+            "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
     ]
